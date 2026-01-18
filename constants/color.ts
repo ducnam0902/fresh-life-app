@@ -4,7 +4,7 @@ export const COLORS = {
     accent: "#2E8B57",
     backgroundLight: "#F8FFF8",
     backgroundDark: "#102210",
-    textMain: "#1A1C1A",
+    textMain: "#000000",
     textSecondary: "#6B7280",
     surface: "#FFFFFF",
     success: "#4CAF50",

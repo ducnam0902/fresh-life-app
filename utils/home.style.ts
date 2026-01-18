@@ -132,21 +132,6 @@ const styles = StyleSheet.create({
     color: COLORS.textMain,
     fontWeight: 500,
   },
-  slideContainer: {
-    marginTop: 12,
-  },
-  slideStatus: {
-    borderWidth: 6,
-    borderRadius: 40,
-    borderColor: COLORS.border,
-    opacity: 0.3,
-    position: "relative",
-  },
-  activeSlide: {
-    padding: 6,
-    borderRadius: 40,
-    position: "absolute",
-  },
   buttonGroup: {
     flexDirection: "row",
     justifyContent: "space-between",

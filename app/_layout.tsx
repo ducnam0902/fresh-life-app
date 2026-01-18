@@ -18,7 +18,7 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView>
       <SafeScreen>
-        <StatusBar hidden={false}/>
+        <StatusBar />
         {isLoading && <LoadingScreen />}
         <Stack>
           <Stack.Protected guard={!Boolean(userInfo)}>
@@ -34,6 +34,17 @@ export default function RootLayout() {
                 headerShown: false,
                 animation: isAuthSegment ? "default" : "none",
               }}
+            />
+          </Stack.Protected>
+          <Stack.Protected guard={Boolean(userInfo)}>
+            <Stack.Screen
+              name="(modal)/addTask"
+              options={{
+                headerShown: false,
+                presentation: "modal",
+
+              }}
+              
             />
           </Stack.Protected>
         </Stack>

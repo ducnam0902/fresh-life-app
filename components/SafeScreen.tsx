@@ -13,9 +13,10 @@ const SafeScreen = ({ children }: SafeScreenProps) => {
     <View
       style={{
         paddingTop: insets.top,
+        paddingBottom: insets.bottom,
         flex: 1,
         backgroundColor: COLORS.backgroundLight,
-        position: 'relative'
+        position: "relative",
       }}
     >
       {children}
