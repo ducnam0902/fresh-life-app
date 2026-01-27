@@ -2,162 +2,312 @@ import { COLORS } from "@/constants/color";
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  homeContainer: {
+    container: {
     flex: 1,
+    backgroundColor: COLORS.colors.background,
+  },
+
+  scrollView: {
+    flex: 1,
+  },
+
+  // Header
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingHorizontal: 16,
-  },
-  notiContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  notiIcon: {
-    borderRadius: 9999,
-    backgroundColor: COLORS.surface,
-    height: 36,
-    width: 36,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  welcomeContainer: {
-    flexDirection: "row",
-    gap: 12,
-    alignItems: "center",
-  },
-  avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 9999,
-    display: "flex",
-    
-  },
-  title: {
-    color: COLORS.accent,
-    fontSize: 14,
-    fontWeight: 400,
-    marginBottom: 4,
-  },
-  subTitle: {
-    color: COLORS.textMain,
-    fontSize: 16,
-    fontWeight: 600,
-  },
-  today: {
-    fontSize: 24,
-    fontWeight: 600,
-    marginTop: 16,
-    letterSpacing: 0.1,
-  },
-  overviewContainer: {
-    padding: 24,
-    backgroundColor: COLORS.surface,
-    marginTop: 16,
-    borderRadius: 16,
-    borderColor: COLORS.border,
-    borderWidth: 0.5,
-    elevation: 5,
-    shadowColor: COLORS.border,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.8,
-    shadowRadius: 1,
-  },
-  todayRemaining: {
-    marginBottom: 12,
-  },
-  remainingTitle: {
-    fontSize: 16,
-    color: COLORS.accent,
-    marginBottom: 2,
-    fontWeight: 400,
-  },
-  remeiningValue: {
-    fontSize: 35,
-    fontWeight: 900,
-    color: COLORS.textMain,
-  },
-  budgetToday: {
-    flexDirection: "row",
-    gap: 4,
-    justifyContent: "space-between",
-  },
-
-  budgetLimitTitle: {
-    fontSize: 14,
-    color: COLORS.accent,
-    textTransform: "uppercase",
-    marginBottom: 8,
-  },
-  budgetLimitValue: {
-    fontSize: 18,
-    color: COLORS.success,
-    fontWeight: 800,
-  },
-  verticalLine: {
-    borderColor: COLORS.border,
-    borderLeftWidth: 0.4,
-  },
-
-  spentTodayTitle: {
-    fontSize: 14,
-    color: COLORS.accent,
-    textTransform: "uppercase",
-    marginBottom: 8,
-    textAlign: "right",
-  },
-  spentTodayValue: {
-    fontSize: 18,
-    color: COLORS.error,
-    fontWeight: 800,
-    textAlign: "right",
-  },
-  horizontalLine: {
-    marginTop: 16,
-    borderColor: COLORS.border,
-    borderBottomWidth: 0.2,
-  },
-  dailyUsageContainer: {
-    marginTop: 20,
-  },
-  dailyUsageSection: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  dailyUsageTitle: {
-    fontSize: 16,
-    color: COLORS.accent,
-    fontWeight: 500,
-  },
-  dailyUsageValue: {
-    fontSize: 16,
-    color: COLORS.textMain,
-    fontWeight: 500,
-  },
-  buttonGroup: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 20,
-  },
-  button: {
     paddingVertical: 12,
-    borderRadius: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.colors.border,
+  },
 
-    backgroundColor: COLORS.primary,
-    textAlign: "center",
-    width: "48%",
+  headerLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+
+  headerTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: COLORS.colors.text.primary,
+    fontFamily: COLORS.typography.fontFamily,
+  },
+
+  notificationIcon: {
+    padding: 8,
+  },
+
+  // Welcome Section
+  welcomeSection: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 20,
+  },
+
+  welcomeText: {
+    flex: 1,
+  },
+
+  greeting: {
+    fontSize: 14,
+    fontWeight: "400",
+    color: COLORS.colors.text.secondary,
+    fontFamily: COLORS.typography.fontFamily,
+  },
+
+  userName: {
+    fontSize: 26,
+    fontWeight: "700",
+    color: COLORS.colors.primary,
+    fontFamily: COLORS.typography.fontFamily,
+  },
+
+  avatarContainer: {
+    position: "relative",
+    width: 60,
+    height: 60,
+  },
+
+  avatar: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    borderWidth: 2,
+    borderColor: COLORS.colors.primary,
+  },
+
+  avatarBadge: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    backgroundColor: COLORS.colors.background,
+    borderRadius: 12,
+    padding: 2,
+  },
+
+  // Section Container
+  sectionContainer: {
+    paddingHorizontal: 16,
+    marginBottom: 24,
+  },
+
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: COLORS.colors.text.primary,
+    marginBottom: 12,
+    fontFamily: COLORS.typography.fontFamily,
+  },
+
+  // Task Progress Card
+  taskProgressCard: {
+    borderRadius: 18,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: COLORS.colors.border,
+    overflow: "hidden",
+  },
+
+  taskProgressContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 24,
+  },
+
+  circleProgressContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  circleProgress: {
+    borderRadius: 70,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  circleProgressInner: {
+    borderRadius: 60,
+    borderWidth: 8,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  circleProgressText: {
+    alignItems: "center",
+  },
+
+  progressPercentage: {
+    fontSize: 28,
+    fontWeight: "700",
+    color: COLORS.colors.primary,
+    fontFamily: COLORS.typography.fontFamily,
+  },
+
+  progressLabel: {
+    fontSize: 11,
+    fontWeight: "600",
+    color: COLORS.colors.text.secondary,
+    marginTop: 4,
+    fontFamily: COLORS.typography.fontFamily,
+  },
+
+  taskStatsContainer: {
+    flex: 1,
+    gap: 12,
+  },
+
+  taskStatItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+
+  statDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+
+  statLabel: {
+    fontSize: 12,
+    fontWeight: "400",
+    color: COLORS.colors.text.secondary,
+    fontFamily: COLORS.typography.fontFamily,
+  },
+
+  statValue: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: COLORS.colors.text.primary,
+    fontFamily: COLORS.typography.fontFamily,
+  },
+
+  // Budget Card
+  budgetCard: {
+    borderRadius: 18,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: COLORS.colors.border,
+    overflow: "hidden",
+  },
+
+  budgetContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 24,
+    marginBottom: 16,
+  },
+
+  gaugeContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: 120,
+  },
+
+  gaugeChart: {
+    width: 100,
+    height: 60,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  gaugeArc: {
+    width: 80,
+    height: 40,
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    borderWidth: 6,
+    borderBottomWidth: 0,
+    borderLeftColor: COLORS.colors.border,
+    borderRightColor: COLORS.colors.border,
+  },
+
+  gaugeLabel: {
+    marginTop: 8,
+  },
+
+  gaugeText: {
+    fontSize: 11,
+    fontWeight: "600",
+    color: COLORS.colors.primary,
+    fontFamily: COLORS.typography.fontFamily,
+  },
+
+  budgetInfo: {
+    flex: 1,
+  },
+
+  budgetTitle: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: COLORS.colors.text.secondary,
+    marginBottom: 8,
+    fontFamily: COLORS.typography.fontFamily,
+  },
+
+  budgetAmount: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: COLORS.colors.text.primary,
+    fontFamily: COLORS.typography.fontFamily,
+  },
+
+  budgetSubtext: {
+    fontSize: 13,
+    fontWeight: "400",
+    color: COLORS.colors.text.secondary,
+    marginTop: 4,
+    fontFamily: COLORS.typography.fontFamily,
+  },
+
+  budgetExpense: {
+    color: COLORS.colors.text.primary,
+    fontWeight: "500",
+  },
+
+  budgetDivider: {
+    height: 1,
+    backgroundColor: COLORS.colors.border,
+    marginVertical: 16,
+  },
+
+  trendSection: {
+    gap: 12,
+  },
+
+  trendHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+  trendLabel: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: COLORS.colors.text.secondary,
+    fontFamily: COLORS.typography.fontFamily,
+  },
+
+  trendValue: {
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
-    justifyContent: "center",
   },
-  buttonTitle: {
-    color: COLORS.textMain,
-    fontSize: 16,
-    fontWeight: 700,
+
+  trendPercent: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: COLORS.colors.primary,
+    fontFamily: COLORS.typography.fontFamily,
   },
-  transactionButton: {
-    backgroundColor: COLORS.surface,
-    borderWidth: 0.6,
-    borderColor: COLORS.border
+
+  lineChart: {
+    marginVertical: 8,
+    borderRadius: 8,
   },
 });
 

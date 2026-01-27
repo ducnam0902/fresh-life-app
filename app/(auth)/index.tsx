@@ -8,11 +8,20 @@ import {
 } from "@react-native-google-signin/google-signin";
 import { Image } from "expo-image";
 import React from "react";
-import { Pressable, Text, View } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+  ActivityIndicator,
+} from "react-native";
 import styles from "./index.style";
 import { supabase } from "@/utils/supabase";
-import { useRouter } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { useAuthStore } from "@/store/authStore";
+import { LinearGradient } from "expo-linear-gradient";
+import { COLORS } from "@/constants/color";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 GoogleSignin.configure({
   webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
@@ -85,18 +94,98 @@ const SignInScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Image source={require("@/assets/fresh-logo.png")} style={styles.logo} />
-      <Text style={styles.title}>Manage Life & Money</Text>
-      <Text style={styles.subTitle}>
-        Track your tasks and budget in one place.
-      </Text>
-      <Pressable style={styles.signInButton} onPress={() => signIn()}>
-        <Image
-          source={{ uri: "https://img.icons8.com/color/48/google-logo.png" }}
-          style={styles.googleIcon}
-        />
-        <Text style={styles.signInText}>Sign in with Google</Text>
-      </Pressable>
+      <LinearGradient
+        colors={[COLORS.colors.background, COLORS.colors.surfaceLight]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.backgroundGradient}
+      >
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Logo Section */}
+          <View style={styles.logoContainer}>
+            <View style={styles.logoBadge}>
+              {/* <MaterialCommunityIcons
+                name="leaf"
+                size={48}
+                color={COLORS.colors.primary}
+              /> */}
+                <Image source={require("@/assets/fresh-logo.png")} style={styles.logoBadge} />
+            </View>
+          </View>
+
+          {/* Title Section */}
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>Fresh Life</Text>
+            <Text style={styles.subtitle}>
+              Step into a healthier rhythm with{"\n"}every choice.
+            </Text>
+          </View>
+
+          {/* Google Sign In Button */}
+          <Pressable
+            style={({ pressed }) => [
+              styles.googleButton,
+              pressed && styles.googleButtonPressed,
+            ]}
+            onPress={signIn}
+            disabled={false}
+          >
+            {false ? (
+              <ActivityIndicator
+                size="small"
+                color={COLORS.colors.text.onPrimary}
+              />
+            ) : (
+              <>
+                <MaterialCommunityIcons
+                  name="google"
+                  size={20}
+                  color="#EA4335"
+                  style={styles.googleIcon}
+                />
+                <Text style={styles.googleButtonText}>
+                  Continue with Google
+                </Text>
+              </>
+            )}
+          </Pressable>
+
+          {/* Sign Up Link */}
+          <View style={styles.signUpContainer}>
+            <Text style={styles.signUpText}>New here?</Text>
+            <Link href="/(auth)/signup" asChild>
+              <Pressable>
+                <Text style={styles.signUpLink}>Create an account</Text>
+              </Pressable>
+            </Link>
+          </View>
+
+          {/* Spacer */}
+          <View style={styles.spacer} />
+
+          {/* Terms and Privacy */}
+          <View style={styles.termsContainer}>
+            <Text style={styles.termsText}>
+              By continuing, you agree to our{" "}
+            </Text>
+            <Link href="https://example.com/terms" asChild>
+              <Pressable>
+                <Text style={styles.termsLink}>Terms of Service</Text>
+              </Pressable>
+            </Link>
+            <Text style={styles.termsText}> and </Text>
+            <Link href="https://example.com/privacy" asChild>
+              <Pressable>
+                <Text style={styles.termsLink}>Privacy Policy</Text>
+              </Pressable>
+            </Link>
+            <Text style={styles.termsText}>.</Text>
+          </View>
+        </ScrollView>
+      </LinearGradient>
     </View>
   );
 };

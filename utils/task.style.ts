@@ -2,110 +2,167 @@ import { COLORS } from "@/constants/color";
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
+  flatListContainer: {
+    flexGrow: 1,
+    backgroundColor: COLORS.colors.background,
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 20,
+  },
+
   container: {
     flex: 1,
-    backgroundColor: COLORS.backgroundLight,
-    paddingHorizontal: 16,
-    position: "relative",
+    backgroundColor: COLORS.colors.background,
   },
+
+  // Header
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 20,
+    marginTop: 8,
   },
-  addIcon: {
-    borderRadius: 9999,
-    backgroundColor: COLORS.surface,
-    height: 36,
-    width: 36,
-    justifyContent: "center",
-    alignItems: "center",
-  },
+
   welcomeContainer: {
     flexDirection: "row",
     gap: 12,
     alignItems: "center",
+    flex: 1,
   },
+
   avatar: {
     width: 48,
     height: 48,
-    borderRadius: 9999,
-    display: "flex",
+    borderRadius: 24,
   },
+
   title: {
-    fontSize: 20,
-    color: COLORS.textMain,
-    fontWeight: 600,
+    fontSize: 18,
+    color: COLORS.colors.text.primary,
+    fontWeight: "600",
     letterSpacing: 0.5,
   },
+
+  dateText: {
+    fontSize: 14,
+    color: COLORS.colors.text.secondary,
+    fontWeight: "400",
+    marginTop: 2,
+  },
+
+  addIcon: {
+    borderRadius: 24,
+    backgroundColor: COLORS.colors.primary,
+    height: 40,
+    width: 40,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  // My Tasks Title
+  myTasksTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: COLORS.colors.text.primary,
+    marginBottom: 12,
+  },
+
+  // Overview Container
   overviewContainer: {
-    marginVertical: 16,
-    borderWidth: 0.4,
-    borderRadius: 20,
-    borderColor: COLORS.border,
-    backgroundColor: COLORS.surface,
-    padding: 24,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderRadius: 16,
+    borderColor: COLORS.colors.border,
+    backgroundColor: COLORS.colors.surface,
+    padding: 16,
   },
-  overviewTitle: {
-    color: COLORS.textSecondary,
+
+  overviewStats: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+  statColumn: {
+    alignItems: "center",
+    flex: 1,
+  },
+
+  statLabel: {
+    color: COLORS.colors.text.secondary,
+    fontSize: 12,
+    fontWeight: "600",
     textTransform: "uppercase",
-    fontSize: 20,
-    fontWeight: 500,
-    marginBottom: 6,
-    letterSpacing: 0.6,
+    letterSpacing: 0.8,
+    marginBottom: 8,
   },
-  progress: {
+  statRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  percentTask: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
     alignItems: "baseline",
+    gap: 6,
   },
-  percent: {
-    fontSize: 35,
-    color: COLORS.textMain,
-    fontWeight: 500,
+  statValue: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: COLORS.colors.text.primary,
   },
-  percentText: {
-    color: COLORS.textSecondary,
-    fontSize: 20,
-    fontWeight: 300,
+
+  statUnit: {
+    fontSize: 12,
+    fontWeight: "500",
+    color: COLORS.colors.primary,
+    marginTop: 2,
   },
-  doneTask: {
-    backgroundColor: COLORS.primary,
-    borderRadius: 20,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+
+  divider: {
+    width: 1,
+    height: 40,
+    backgroundColor: COLORS.colors.border,
+    marginHorizontal: 8,
   },
-  doneTitle: {
-    color: COLORS.textMain,
-    fontWeight: 600,
-    paddingHorizontal: 4,
+
+  progressCircleContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: 12,
   },
-  titleContainer: {
-    marginVertical: 8,
-    flexDirection: "row",
-    justifyContent: "space-between",
+
+  progressCircle: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    borderWidth: 4,
+    justifyContent: "center",
     alignItems: "center",
   },
-  titleText: {
-    color: COLORS.textMain,
-    fontSize: 24,
-    fontWeight: 600,
+
+  progressText: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: COLORS.colors.text.primary,
   },
+
+  // Tasks Title
+  tasksTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: COLORS.colors.text.primary,
+    marginBottom: 12,
+    marginTop: 4,
+  },
+
+  // Task Item
   taskItem: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-    marginVertical: 8,
-    backgroundColor: COLORS.surface,
-    borderRadius: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 12,
+    marginBottom: 10,
+    backgroundColor: COLORS.colors.surface,
+    borderRadius: 48,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: COLORS.colors.border,
   },
 
   checkboxContainer: {
@@ -117,15 +174,15 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: COLORS.textSecondary,
-    backgroundColor: COLORS.surface,
+    borderColor: COLORS.colors.primary,
+    backgroundColor: "transparent",
   },
 
   checkboxChecked: {
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.colors.primary,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -135,39 +192,55 @@ const styles = StyleSheet.create({
   },
 
   taskTitle: {
-    fontSize: 18,
-    fontWeight: "500",
-    color: COLORS.textMain,
-    marginBottom: 4,
+    fontSize: 20,
+    fontWeight: "600",
+    color: COLORS.colors.text.primary,
+    marginBottom: 6,
   },
 
   taskTitleCompleted: {
     textDecorationLine: "line-through",
-    color: COLORS.textSecondary,
+    color: COLORS.colors.text.secondary,
+  },
+
+  taskMetaContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
   },
 
   taskTimeContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginRight: 12,
+    gap: 4,
   },
 
   taskTime: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: "500",
-    color: COLORS.accent,
-    marginLeft: 4,
+    color: COLORS.colors.text.secondary,
+  },
+
+  priorityText: {
+    fontSize: 12,
+    fontWeight: "600",
   },
 
   tagBadge: {
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+    marginHorizontal: 8,
   },
 
   tagText: {
-    fontSize: 12,
+    fontSize: 10,
     fontWeight: "700",
+    textTransform: "uppercase",
+  },
+
+  chevron: {
+    marginLeft: 8,
   },
 });
 

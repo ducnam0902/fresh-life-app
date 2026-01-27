@@ -1,17 +1,16 @@
 import { COLORS } from "@/constants/color";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Tabs } from "expo-router";
-const TabsLayout = () => { 
-
+const TabsLayout = () => {
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: COLORS.accent,
-        tabBarInactiveTintColor: COLORS.textSecondary,
+        tabBarActiveTintColor: COLORS.colors.primary,
+        tabBarInactiveTintColor: COLORS.colors.text.secondary,
         tabBarStyle: {
-          backgroundColor: COLORS.surface,
-          borderTopColor: COLORS.border,
+          backgroundColor: COLORS.colors.surface,
+          borderTopColor: COLORS.colors.border,
           borderTopWidth: 1,
           paddingBottom: 8,
           paddingTop: 8,
@@ -22,8 +21,8 @@ const TabsLayout = () => {
           fontWeight: "600",
         },
         sceneStyle: {
-          backgroundColor: COLORS.backgroundLight
-        }
+          backgroundColor: COLORS.colors.background,
+        },
       }}
     >
       <Tabs.Screen
@@ -32,7 +31,7 @@ const TabsLayout = () => {
           title: "Home",
           tabBarIcon: ({ color, size }) => (
             <Ionicons
-              name="home-outline"
+              name="home"
               size={size}
               color={color}
               style={{ fontWeight: 600 }}
@@ -45,10 +44,18 @@ const TabsLayout = () => {
         options={{
           title: "Tasks",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="today-outline" size={size} color={color} />
+            <Ionicons name="checkmark-circle-outline" size={size} color={color} />
           ),
         }}
-        
+      />
+      <Tabs.Screen
+        name="schedule"
+        options={{
+          title: "Schedule",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="calendar-outline" size={size} color={color} />
+          ),
+        }}
       />
       <Tabs.Screen
         name="budget"
@@ -56,15 +63,6 @@ const TabsLayout = () => {
           title: "Budget",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="wallet-outline" size={size} color={color} />
-          ),
-        }}
-      />
-            <Tabs.Screen
-        name="profile"
-        options={{
-          title: "Profile",
-          tabBarIcon: ({ color, size }) => (
-          <Ionicons name="person-outline" size={size} color={color} />
           ),
         }}
       />

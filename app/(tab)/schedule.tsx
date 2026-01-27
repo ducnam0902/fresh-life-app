@@ -28,7 +28,7 @@ const ProfileScreen = () => {
       <Pressable
         onPress={logout}
         style={{
-          backgroundColor: COLORS.primary,
+          backgroundColor: COLORS.colors.background,
           margin: 6,
           borderRadius: 6,
           padding: 4,

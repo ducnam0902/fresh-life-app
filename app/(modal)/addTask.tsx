@@ -8,13 +8,14 @@ import {
   Alert,
 } from "react-native";
 import React, { useState } from "react";
+import Toast from "react-native-toast-message";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import moment from "moment";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import styles from "@/utils/addTask.style";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/color";
 import { useRouter } from "expo-router";
 import { supabase } from "@/utils/supabase";
@@ -139,7 +140,7 @@ const AddTaskModal = () => {
 
   const onSubmit = async (data: TaskFormData) => {
     try {
-        setLoading(true);
+      setLoading(true);
       // Insert task data into tasks table
       const { data: insertedData, error: insertError } = await supabase
         .from("Tasks")
@@ -156,18 +157,29 @@ const AddTaskModal = () => {
         .select();
 
       if (insertError) {
-        Alert.alert("Error", `Failed to create task: ${insertError.message}`);
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: `Failed to create task: ${insertError.message}`,
+        });
         return;
       }
-
-      Alert.alert("Success", "Task added successfully!");
+      Toast.show({
+        type: "success",
+        text1: "Success",
+        text2: "Task added successfully!",
+      });
       reset();
       router.push("/(tab)/tasks");
     } catch (error) {
       console.error("Error submitting task:", error);
-      Alert.alert("Error", "An unexpected error occurred");
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "An unexpected error occurred",
+      });
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   };
 
@@ -180,10 +192,15 @@ const AddTaskModal = () => {
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Header */}
       <View style={styles.headerTitle}>
-        <Text style={styles.newTaskTitle}>New Task</Text>
-        <Pressable onPress={handleCancel}>
-          <Ionicons name="close-outline" size={28} color={COLORS.textMain} />
+        <Pressable onPress={handleCancel} style={styles.backButton}>
+          <Ionicons
+            name="chevron-back"
+            size={28}
+            color={COLORS.colors.text.primary}
+          />
         </Pressable>
+        <Text style={styles.newTaskTitle}>New Task</Text>
+        <View style={{ width: 28 }} />
       </View>
 
       {/* Task Name Input */}
@@ -196,8 +213,8 @@ const AddTaskModal = () => {
             <>
               <TextInput
                 style={styles.taskNameInput}
-                placeholder="What are you going to do?"
-                placeholderTextColor={COLORS.textSecondary}
+                placeholder="What do you want to accomplish?"
+                placeholderTextColor={COLORS.colors.text.secondary}
                 value={value}
                 onChangeText={onChange}
                 onBlur={onBlur}
@@ -210,9 +227,9 @@ const AddTaskModal = () => {
         />
       </View>
 
-      {/* Tag Selection */}
+      {/* Category/Tag Selection */}
       <View style={styles.formSection}>
-        <Text style={styles.sectionLabel}>TAG</Text>
+        <Text style={styles.sectionLabel}>CATEGORY</Text>
         <Controller
           control={control}
           name="tag"
@@ -274,9 +291,11 @@ const AddTaskModal = () => {
         />
       </View>
 
-      {/* Due Date Input */}
+      {/* Due Date & Time Section */}
       <View style={styles.formSection}>
-        <Text style={styles.sectionLabel}>DUE DATE</Text>
+        <Text style={styles.sectionLabel}>DUE DATE & TIME</Text>
+
+        {/* Due Date */}
         <Controller
           control={control}
           name="dueDate"
@@ -286,18 +305,22 @@ const AddTaskModal = () => {
                 style={styles.dueDateContainer}
                 onPress={() => setShowDatePicker(true)}
               >
-                <TextInput
-                  style={styles.dueDateInput}
-                  placeholder="DD/MM/YYYY"
-                  placeholderTextColor={COLORS.textSecondary}
-                  value={value}
-                  editable={false}
-                  pointerEvents="none"
+                <MaterialCommunityIcons
+                  name="calendar"
+                  size={20}
+                  color={COLORS.colors.primary}
+                  style={styles.dateIcon}
                 />
+                <Text style={styles.dueDateText}>
+                  {value
+                    ? `${moment(value, "DD/MM/YYYY").format("ddd, MMM DD")}`
+                    : "Select date"}
+                </Text>
                 <Ionicons
-                  name="calendar-outline"
-                  size={24}
-                  color={COLORS.textMain}
+                  name="chevron-forward"
+                  size={20}
+                  color={COLORS.colors.text.secondary}
+                  style={styles.chevronIcon}
                 />
               </Pressable>
               {errors.dueDate && (
@@ -306,6 +329,7 @@ const AddTaskModal = () => {
             </>
           )}
         />
+
         {showDatePicker && (
           <DateTimePicker
             value={
@@ -318,11 +342,8 @@ const AddTaskModal = () => {
             onChange={handleDateChange}
           />
         )}
-      </View>
 
-      {/* Estimated Time Input */}
-      <View style={styles.formSection}>
-        <Text style={styles.sectionLabel}>ESTIMATED TIME</Text>
+        {/* Estimated Time */}
         <Controller
           control={control}
           name="estimatedTime"
@@ -331,22 +352,25 @@ const AddTaskModal = () => {
               style={styles.estimatedTimeContainer}
               onPress={() => setShowTimePicker(true)}
             >
-              <TextInput
-                style={styles.estimatedTimeInput}
-                placeholder="HH:MM"
-                placeholderTextColor={COLORS.textSecondary}
-                value={value}
-                editable={false}
-                pointerEvents="none"
+              <MaterialCommunityIcons
+                name="clock"
+                size={20}
+                color={COLORS.colors.primary}
+                style={styles.timeIcon}
               />
+              <Text style={styles.estimatedTimeText}>
+                {value ? `${value}` : "Select time"}
+              </Text>
               <Ionicons
-                name="time-outline"
-                size={24}
-                color={COLORS.textSecondary}
+                name="chevron-forward"
+                size={20}
+                color={COLORS.colors.text.secondary}
+                style={styles.chevronIcon}
               />
             </Pressable>
           )}
         />
+
         {showTimePicker && (
           <DateTimePicker
             value={
@@ -357,21 +381,23 @@ const AddTaskModal = () => {
             mode="time"
             display="default"
             onChange={handleTimeChange}
+            is24Hour={true}
           />
         )}
       </View>
 
+      {/* Spacer */}
+      <View style={styles.spacer} />
+
       {/* Action Buttons */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          style={styles.addTaskButton}
+          style={styles.createTaskButton}
           onPress={handleSubmit(onSubmit)}
+          activeOpacity={0.8}
         >
-          <Text style={styles.addTaskButtonText}>Add Task</Text>
+          <Text style={styles.createTaskButtonText}>Create Task</Text>
         </TouchableOpacity>
-        <Pressable onPress={handleCancel}>
-          <Text style={styles.cancelButtonText}>Cancel</Text>
-        </Pressable>
       </View>
     </ScrollView>
   );

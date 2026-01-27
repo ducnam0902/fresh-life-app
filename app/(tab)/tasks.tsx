@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Text, View, Pressable, FlatList } from "react-native";
 import styles from "@/utils/task.style";
 import ProgressBar from "@/components/ProgressBar";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, Entypo } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { useAuthStore } from "@/store/authStore";
 import { Link } from "expo-router";
@@ -33,7 +33,9 @@ const Tasks = () => {
   const { setLoading } = useLoadingStore();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [completedTask, setCompletedTask] = useState(0);
-  const percentTask = Math.round((completedTask / tasks.length) * 100);
+  const percentTask = isNaN(Math.round((completedTask / tasks.length) * 100))
+    ? 0
+    : Math.round((completedTask / tasks.length) * 100);
 
   const fetchTasks = async () => {
     try {
@@ -48,7 +50,7 @@ const Tasks = () => {
         .select("*")
         .eq("user_id", userInfo?.id)
         .eq("due_date", moment().format("DD/MM/YYYY"))
-        .order("estimated_time", { ascending: true })
+        .order("estimated_time", { ascending: true });
 
       if (error) throw error;
       setTasks(data || []);
@@ -113,6 +115,15 @@ const Tasks = () => {
     return tagColors[tag] || "#999999";
   };
 
+  const getPriorityColor = (priority: string): string => {
+    const priorityColors: { [key: string]: string } = {
+      High: COLORS.colors.error,
+      Medium: COLORS.colors.warning,
+      Low: COLORS.colors.info,
+    };
+    return priorityColors[priority] || COLORS.colors.border;
+  };
+
   useEffect(() => {
     fetchTasks();
   }, []);
@@ -130,8 +141,10 @@ const Tasks = () => {
       <View
         style={{
           ...styles.taskItem,
-          borderLeftColor: duration ? COLORS.border : COLORS.error,
-          borderLeftWidth: duration ? 1 : 4,
+          borderLeftColor: duration
+            ? COLORS.colors.surface
+            : COLORS.colors.warning,
+          borderLeftWidth: duration ? 1 : 2,
           opacity: item.is_complete ? 0.6 : 1,
         }}
       >
@@ -162,15 +175,28 @@ const Tasks = () => {
               <Ionicons
                 name={duration ? "time-outline" : "warning-outline"}
                 size={14}
-                color={duration ? COLORS.accent : COLORS.error}
+                color={duration ? COLORS.colors.error : COLORS.colors.border}
               />
               <Text
                 style={{
                   ...styles.taskTime,
-                  color: duration ? COLORS.accent : COLORS.error,
+                  color: duration ? COLORS.colors.error : COLORS.colors.border,
                 }}
               >
                 {item.estimated_time}
+              </Text>
+              <Entypo
+                name={"dot-single"}
+                size={20}
+                color={COLORS.colors.text.secondary}
+              />
+              <Text
+                style={{
+                  ...styles.priorityText,
+                  color: getPriorityColor(item.priority),
+                }}
+              >
+                {item.priority} Priority
               </Text>
             </View>
           )}
@@ -190,53 +216,83 @@ const Tasks = () => {
     );
   };
 
-  return (
-    <ScrollView style={styles.container}>
+  const ListHeaderComponent = () => (
+    <View>
+      {/* Header */}
       <View style={styles.header}>
         <View style={styles.welcomeContainer}>
           <Image
             source={{ uri: userInfo?.avatar ?? "" }}
             style={styles.avatar}
-            contentFit="contain"
+            contentFit="cover"
           />
           <View>
-            <Text style={styles.title}>Task List</Text>
-          </View>
-        </View>
-        <View style={styles.addIcon}>
-          <Link href="/(modal)/addTask">
-            <Ionicons name="add-outline" size={30} color="black" />
-          </Link>
-        </View>
-      </View>
-
-      <View style={styles.overviewContainer}>
-        <Text style={styles.overviewTitle}>Daily Progress </Text>
-        <View style={styles.progress}>
-          <View style={styles.percentTask}>
-            <Text style={styles.percent}>{isNaN(percentTask) ? 0 : percentTask }%</Text>
-            <Text style={styles.percentText}> done</Text>
-          </View>
-          <View style={styles.doneTask}>
-            <Text style={styles.doneTitle}>
-              {completedTask}/{tasks.length} tasks
+            <Text style={styles.title}>Hello, {userInfo?.name}</Text>
+            <Text style={styles.dateText}>
+              {moment().format("dddd, MMM DD")}
             </Text>
           </View>
         </View>
-        <ProgressBar activePercents={`${isNaN(percentTask) ? 0 : percentTask}%`} />
+        <Link href="/(modal)/addTask" asChild>
+          <Pressable style={styles.addIcon}>
+            <Ionicons name="add" size={26} color={COLORS.colors.background} />
+          </Pressable>
+        </Link>
       </View>
 
-      <View style={styles.titleContainer}>
-        <Text style={styles.titleText}> Today's Focus</Text>
-      </View>
+      {/* My Tasks Title */}
+      <Text style={styles.myTasksTitle}>My Tasks</Text>
 
-      <FlatList
-        data={tasks}
-        renderItem={renderTaskItem}
-        scrollEnabled={false}
-        nestedScrollEnabled={true}
-      />
-    </ScrollView>
+      {/* Overview Container */}
+      <View style={styles.overviewContainer}>
+        <View style={styles.overviewStats}>
+          <View style={styles.statColumn}>
+            <Text style={styles.statLabel}>PENDING</Text>
+            <View style={styles.statRow}>
+              <Text style={styles.statValue}>{0}</Text>
+              <Text style={styles.statUnit}>tasks</Text>
+            </View>
+          </View>
+
+          <View style={styles.divider} />
+
+          <View style={styles.statColumn}>
+            <Text style={styles.statLabel}>COMPLETED</Text>
+            <View style={styles.statRow}>
+              <Text style={styles.statValue}>{completedTask}</Text>
+              <Text style={styles.statUnit}>tasks</Text>
+            </View>
+          </View>
+
+          <View style={styles.progressCircleContainer}>
+            <View
+              style={[
+                styles.progressCircle,
+                {
+                  borderTopColor: COLORS.colors.primary,
+                  borderRightColor: COLORS.colors.primary,
+                  borderBottomColor: COLORS.colors.border,
+                  borderLeftColor: COLORS.colors.border,
+                },
+              ]}
+            >
+              <Text style={styles.progressText}>{percentTask}%</Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+  );
+
+  return (
+    <FlatList
+      data={tasks}
+      renderItem={renderTaskItem}
+      keyExtractor={(item) => item.id}
+      ListHeaderComponent={ListHeaderComponent}
+      contentContainerStyle={styles.flatListContainer}
+      scrollEnabled={true}
+    />
   );
 };
 
