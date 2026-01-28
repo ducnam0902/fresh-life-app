@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingTop: 40,
     paddingBottom: 40,
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
   },
 
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
-    // borderColor: COLORS.colors.border,
+    borderColor: COLORS.colors.border,
     shadowColor: COLORS.colors.primary,
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.3,
@@ -82,7 +82,6 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     width: "100%",
     minHeight: 54,
-    shadowColor: "#000000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 12,
@@ -103,62 +102,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: COLORS.colors.text.onPrimary,
     letterSpacing: 0.3,
-    fontFamily: COLORS.typography.fontFamily,
-  },
-
-  // Sign Up Section
-  signUpContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 24,
-    gap: 4,
-  },
-
-  signUpText: {
-    fontSize: 15,
-    fontWeight: "400",
-    color: COLORS.colors.text.secondary,
-    fontFamily: COLORS.typography.fontFamily,
-  },
-
-  signUpLink: {
-    fontSize: 15,
-    fontWeight: "600",
-    color: COLORS.colors.primary,
-    letterSpacing: 0.3,
-    fontFamily: COLORS.typography.fontFamily,
-  },
-
-  // Spacer
-  spacer: {
-    flex: 1,
-  },
-
-  // Terms and Privacy
-  termsContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-    paddingHorizontal: 16,
-  },
-
-  termsText: {
-    fontSize: 13,
-    fontWeight: "400",
-    color: COLORS.colors.text.secondary,
-    textAlign: "center",
-    fontFamily: COLORS.typography.fontFamily,
-    lineHeight: 20,
-  },
-
-  termsLink: {
-    fontSize: 13,
-    fontWeight: "500",
-    color: COLORS.colors.primary,
-    textDecorationLine: "underline",
     fontFamily: COLORS.typography.fontFamily,
   },
 });

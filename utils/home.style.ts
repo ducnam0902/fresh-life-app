@@ -309,6 +309,12 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     borderRadius: 8,
   },
+
+  groupButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  }
 });
 
 export default styles;

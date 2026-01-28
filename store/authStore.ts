@@ -2,7 +2,7 @@ import { deleteItemAsync, getItem, setItem } from "expo-secure-store";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-type UserProps = {
+export type UserProps = {
   id: number;
   name: string;
   email: string;

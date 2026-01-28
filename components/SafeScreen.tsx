@@ -15,7 +15,7 @@ const SafeScreen = ({ children }: SafeScreenProps) => {
         paddingTop: insets.top,
         paddingBottom: insets.bottom,
         flex: 1,
-        backgroundColor:COLORS.colors.background,
+        backgroundColor:COLORS.colors.surface,
         position: "relative",
       }}
     >

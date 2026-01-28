@@ -7,7 +7,7 @@ import { StatusBar } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import SafeScreen from "../components/SafeScreen";
 import { useAuthStore } from "@/store/authStore";
-import Toast from 'react-native-toast-message';
+import Toast from "react-native-toast-message";
 
 export default function RootLayout() {
   const { userInfo, setUser } = useAuthStore();
@@ -36,20 +36,16 @@ export default function RootLayout() {
                 animation: isAuthSegment ? "default" : "none",
               }}
             />
-          </Stack.Protected>
-          <Stack.Protected guard={Boolean(userInfo)}>
             <Stack.Screen
               name="(modal)/addTask"
               options={{
                 headerShown: false,
-                presentation: "fullScreenModal",
-
+                presentation: "modal",
               }}
-              
             />
           </Stack.Protected>
         </Stack>
-         <Toast />
+        <Toast />
       </SafeScreen>
     </GestureHandlerRootView>
   );

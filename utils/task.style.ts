@@ -4,7 +4,6 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   flatListContainer: {
     flexGrow: 1,
-    backgroundColor: COLORS.colors.background,
     paddingHorizontal: 16,
     paddingTop: 12,
     paddingBottom: 20,
@@ -157,7 +156,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 14,
-    paddingHorizontal: 12,
+    paddingHorizontal: 20,
     marginBottom: 10,
     backgroundColor: COLORS.colors.surface,
     borderRadius: 48,
@@ -189,6 +188,7 @@ const styles = StyleSheet.create({
 
   taskContent: {
     flex: 1,
+    marginLeft: 10,
   },
 
   taskTitle: {

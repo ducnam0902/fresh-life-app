@@ -1,18 +1,19 @@
 import ProgressBar from "@/components/ProgressBar";
 import { COLORS } from "@/constants/color";
 import { useAuthStore } from "@/store/authStore";
-
+import { supabase } from "@/utils/supabase";
 import styles from "@/utils/home.style";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { LineChart } from "react-native-chart-kit";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import moment from "moment";
 import React from "react";
 import { Dimensions, Pressable, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { useLoadingStore } from "@/store/loadingStore";
 
 const today = moment().format("ddd, MMM DD");
 
@@ -28,7 +29,21 @@ const chartData = {
 };
 
 const Home = () => {
-  const { userInfo } = useAuthStore();
+  const { userInfo, setUser } = useAuthStore();
+  const { setLoading } = useLoadingStore();
+  const handleLogout = async () => {
+    try {
+      setLoading(true);
+      await supabase.auth.signOut();
+      setUser(null);
+      router.replace("/(auth)");
+    } catch (error) {
+      console.error("Error during logout:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
       {/* Header */}
@@ -36,17 +51,29 @@ const Home = () => {
         <View style={styles.headerLeft}>
           <Image
             source={require("@/assets/fresh-logo.png")}
-            style={{ width: 42, height: 42, backgroundColor: COLORS.colors.background }}
+            style={{
+              width: 42,
+              height: 42,
+            }}
           />
           <Text style={styles.headerTitle}>Fresh Life</Text>
         </View>
-        <Pressable style={styles.notificationIcon}>
-          <Ionicons
-            name="notifications"
-            size={24}
-            color={COLORS.colors.primary}
-          />
-        </Pressable>
+        <View style={styles.groupButton}>
+          <Pressable style={styles.notificationIcon}>
+            <Ionicons
+              name="notifications"
+              size={24}
+              color={COLORS.colors.primary}
+            />
+          </Pressable>
+          <Pressable style={styles.notificationIcon} onPress={handleLogout}>
+            <Ionicons
+              name="log-out-outline"
+              size={24}
+              color={COLORS.colors.primary}
+            />
+          </Pressable>
+        </View>
       </View>
 
       {/* Welcome Section */}

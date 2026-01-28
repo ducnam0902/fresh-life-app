@@ -28,6 +28,8 @@ const formatDateToYYYYMMDD = (dateString: string): string => {
   return `${year}-${month}-${day}`;
 };
 
+
+
 const Tasks = () => {
   const { userInfo } = useAuthStore();
   const { setLoading } = useLoadingStore();
@@ -175,12 +177,12 @@ const Tasks = () => {
               <Ionicons
                 name={duration ? "time-outline" : "warning-outline"}
                 size={14}
-                color={duration ? COLORS.colors.error : COLORS.colors.border}
+                color={duration ? COLORS.colors.error : COLORS.colors.text.secondary}
               />
               <Text
                 style={{
                   ...styles.taskTime,
-                  color: duration ? COLORS.colors.error : COLORS.colors.border,
+                  color: duration ? COLORS.colors.error : COLORS.colors.text.secondary,
                 }}
               >
                 {item.estimated_time}

@@ -21,7 +21,7 @@ const TabsLayout = () => {
           fontWeight: "600",
         },
         sceneStyle: {
-          backgroundColor: COLORS.colors.background,
+          backgroundColor: COLORS.colors.surface,
         },
       }}
     >
