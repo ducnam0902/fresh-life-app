@@ -1,36 +1,26 @@
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-  Pressable,
-  Alert,
-} from "react-native";
-import React, { useState } from "react";
-import Toast from "react-native-toast-message";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import moment from "moment";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import styles from "@/utils/addTask.style";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/color";
-import { useRouter } from "expo-router";
-import { supabase } from "@/utils/supabase";
-import { useAuthStore } from "../../store/authStore";
 import { useLoadingStore } from "@/store/loadingStore";
-
-const tagOptions = [
-  "Personal",
-  "Work",
-  "Health",
-  "Shopping",
-  "Development",
-  "Finance",
-];
-const priorityOptions = ["Low", "Medium", "High"];
+import styles from "@/utils/addTask.style";
+import tasksServices from "@/utils/taskServices";
+import { priorityOptions, tagOptions } from "@/utils/tasksUtils";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { zodResolver } from "@hookform/resolvers/zod";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { useRouter } from "expo-router";
+import moment from "moment";
+import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import {
+    Pressable,
+    ScrollView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
+} from "react-native";
+import Toast from "react-native-toast-message";
+import * as z from "zod";
+import { useAuthStore } from "../../store/authStore";
 
 // Zod validation schema
 const taskSchema = z.object({
@@ -43,12 +33,12 @@ const taskSchema = z.object({
   dueDate: z
     .string()
     .refine(
-      (val) => !val || /^\d{2}\/\d{2}\/\d{4}$/.test(val),
-      "Due date must be in DD/MM/YYYY format"
+      (val) => !val || /^\d{2}\-\d{2}\-\d{4}$/.test(val),
+      "Due date must be in DD-MM-YYYY format"
     )
     .refine((val) => {
       if (!val) return true;
-      const [day, month, year] = val.split("/").map(Number);
+      const [day, month, year] = val.split("-").map(Number);
       const date = new Date(year, month - 1, day);
       return (
         date.getFullYear() === year &&
@@ -100,7 +90,7 @@ const AddTaskModal = () => {
       taskName: "",
       tag: tagOptions[1],
       priority: priorityOptions[1],
-      dueDate: moment().format("DD/MM/YYYY"),
+      dueDate: moment().format("DD-MM-YYYY"),
       estimatedTime: "20:00",
     },
   });
@@ -116,7 +106,7 @@ const AddTaskModal = () => {
       const day = String(selectedDate.getDate()).padStart(2, "0");
       const month = String(selectedDate.getMonth() + 1).padStart(2, "0");
       const year = selectedDate.getFullYear();
-      const formattedDate = `${day}/${month}/${year}`;
+      const formattedDate = `${day}-${month}-${year}`;
       setValue("dueDate", formattedDate);
     }
     setShowDatePicker(false);
@@ -141,36 +131,20 @@ const AddTaskModal = () => {
   const onSubmit = async (data: TaskFormData) => {
     try {
       setLoading(true);
-      // Insert task data into tasks table
-      const { data: insertedData, error: insertError } = await supabase
-        .from("Tasks")
-        .insert([
-          {
-            user_id: userInfo?.id,
-            task_name: data.taskName,
-            tag: data.tag,
-            priority: data.priority,
-            due_date: data.dueDate,
-            estimated_time: data.estimatedTime,
-          },
-        ])
-        .select();
-
-      if (insertError) {
-        Toast.show({
-          type: "error",
-          text1: "Error",
-          text2: `Failed to create task: ${insertError.message}`,
-        });
-        return;
-      }
-      Toast.show({
-        type: "success",
-        text1: "Success",
-        text2: "Task added successfully!",
+      const res = await tasksServices.createTask({
+        id: userInfo?.id,
+        ...data,
       });
-      reset();
-      router.push("/(tab)/tasks");
+
+      if (res.length > 0) {
+        reset();
+        router.replace("/(tab)/tasks");
+        Toast.show({
+          type: "success",
+          text1: "Success",
+          text2: "Task added successfully!",
+        });
+      }
     } catch (error) {
       console.error("Error submitting task:", error);
       Toast.show({
@@ -313,7 +287,7 @@ const AddTaskModal = () => {
                 />
                 <Text style={styles.dueDateText}>
                   {value
-                    ? `${moment(value, "DD/MM/YYYY").format("ddd, MMM DD")}`
+                    ? `${moment(value, "DD-MM-YYYY").format("ddd, MMM DD")}`
                     : "Select date"}
                 </Text>
                 <Ionicons
@@ -334,12 +308,13 @@ const AddTaskModal = () => {
           <DateTimePicker
             value={
               getValues("dueDate")
-                ? new Date(getValues("dueDate").split("/").reverse().join("-"))
+                ? new Date(getValues("dueDate").split("-").reverse().join("-"))
                 : new Date()
             }
             mode="date"
             display="default"
             onChange={handleDateChange}
+            minimumDate={new Date()}
           />
         )}
 

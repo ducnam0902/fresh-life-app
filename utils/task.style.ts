@@ -121,23 +121,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
 
-  progressCircleContainer: {
+  chartContainer: {
     alignItems: "center",
     justifyContent: "center",
-    marginLeft: 12,
+    position: "relative",
   },
 
-  progressCircle: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    borderWidth: 4,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  progressText: {
-    fontSize: 16,
+  chartPercentText: {
+    position: "absolute",
+    fontSize: 14,
     fontWeight: "700",
     color: COLORS.colors.text.primary,
   },
@@ -151,17 +143,45 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
 
+  linkContainer: {
+    marginBottom: 12,
+  },
   // Task Item
   taskItem: {
+    position: "relative",
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 14,
     paddingHorizontal: 20,
-    marginBottom: 10,
+
     backgroundColor: COLORS.colors.surface,
     borderRadius: 48,
     borderWidth: 1,
     borderColor: COLORS.colors.border,
+
+  },
+
+  activeCurves: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    height: 82,
+    width: 82,
+    borderRadius: 9999,
+    backgroundColor: COLORS.colors.warning,
+
+  },
+
+  hideCurves: {
+    position: "absolute",
+    top: 0,
+    left: 3,
+    height: 82,
+    width: 82,
+    borderRadius: 9999,
+    backgroundColor: COLORS.colors.surface,
+    overflow: "hidden",
+
   },
 
   checkboxContainer: {

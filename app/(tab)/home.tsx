@@ -1,19 +1,18 @@
-import ProgressBar from "@/components/ProgressBar";
 import { COLORS } from "@/constants/color";
 import { useAuthStore } from "@/store/authStore";
-import { supabase } from "@/utils/supabase";
+import { useLoadingStore } from "@/store/loadingStore";
 import styles from "@/utils/home.style";
+import { supabase } from "@/utils/supabase";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { LineChart } from "react-native-chart-kit";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 import moment from "moment";
 import React from "react";
 import { Dimensions, Pressable, Text, View } from "react-native";
+import { LineChart } from "react-native-chart-kit";
 import { ScrollView } from "react-native-gesture-handler";
-import { useLoadingStore } from "@/store/loadingStore";
 
 const today = moment().format("ddd, MMM DD");
 
