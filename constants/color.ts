@@ -7,6 +7,12 @@ export const COLORS = {
     error: "#ff453a",
     info: "#007AFF",
     warning: "#FFB84D",
+    orangeColor: "#FF8000",
+    aqua: "#7FFFD4",
+    brown: "#FFDEAD",
+    gold: "#FFD700",
+    springGreen: "#00FF7F",
+    orangeRed: "#FF4500",
     text: {
       primary: "#FFFFFF",     // Pure white for headings and main titles
       secondary: "#8E8E93",   // Medium gray for subtext and timestamps

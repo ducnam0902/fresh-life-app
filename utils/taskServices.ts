@@ -48,6 +48,18 @@ const tasksServices = {
     }
     return data;
   },
+  fetchTaskById: async (taskId: string) => {
+    const { data, error } = await supabase
+      .from("Tasks")
+      .select("*")
+      .eq("id", taskId)
+      .single();
+
+    if (error) {
+      throw error;
+    }
+    return data;
+  }
 };
 
 export default tasksServices;

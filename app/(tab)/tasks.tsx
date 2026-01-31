@@ -3,7 +3,7 @@ import { useAuthStore } from "@/store/authStore";
 import { useLoadingStore } from "@/store/loadingStore";
 import styles from "@/utils/task.style";
 import tasksServices from "@/utils/taskServices";
-import { getPriorityColor, getTagColor } from "@/utils/tasksUtils";
+import { getPriorityColor, getTagColor, Task } from "@/utils/tasksUtils";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
@@ -12,15 +12,6 @@ import React, { useEffect, useState } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
 import { ProgressChart } from "react-native-chart-kit";
 import Toast from "react-native-toast-message";
-interface Task {
-  id: string;
-  task_name: string;
-  tag: string;
-  priority: string;
-  due_date: string;
-  estimated_time: string;
-  is_complete: boolean;
-}
 
 const chartConfig = {
   backgroundGradientFrom: COLORS.colors.surface,
@@ -70,25 +61,6 @@ const Tasks = () => {
     }
   };
 
-  const handleToggleComplete = async (
-    taskId: string,
-    currentStatus: boolean
-  ) => {
-    try {
-      const res = await tasksServices.completeTask(taskId);
-      if (res.length > 0) {
-        Toast.show({
-          type: "success",
-          text1: "Success",
-          text2: "Task completed successfully!",
-        });
-        await fetchTasks();
-      }
-    } catch (error) {
-      console.error("Error updating task:", error);
-    }
-  };
-
   useEffect(() => {
     fetchTasks();
   }, []);
@@ -99,7 +71,13 @@ const Tasks = () => {
     );
     const duration = moment.duration(dueDate.diff(moment())).milliseconds() > 0;
     return (
-      <Link style={styles.linkContainer} href="/(modal)/taskDetails">
+      <Link
+        style={styles.linkContainer}
+        href={{
+          pathname: "/(screens)/TaskDetails/[id]",
+          params: { id: item.id },
+        }}
+      >
         <View
           style={{
             ...styles.taskItem,
@@ -214,7 +192,7 @@ const Tasks = () => {
       <View style={styles.overviewContainer}>
         <View style={styles.overviewStats}>
           <View style={styles.statColumn}>
-            <Text style={styles.statLabel}>PENDING</Text>
+            <Text style={styles.statLabel}>TODO</Text>
             <View style={styles.statRow}>
               <Text style={styles.statValue}>
                 {tasks.length - completedTask}

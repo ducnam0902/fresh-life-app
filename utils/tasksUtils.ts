@@ -2,12 +2,12 @@ import { COLORS } from "@/constants/color";
 
 export const getTagColor = (tag: string): string => {
   const tagColors: { [key: string]: string } = {
-    Personal: "#4D96FF",
-    Work: "#FFB84D",
-    Health: "#4CAF50",
-    Shopping: "#FF9ED5",
-    Development: "#9B59B6",
-    Finance: "#F39C12",
+    Personal: COLORS.colors.brown,
+    Development: COLORS.colors.springGreen,
+    Shopping: COLORS.colors.gold,
+    Work: COLORS.colors.aqua,
+    Health: COLORS.colors.orangeColor,
+    Finance: COLORS.colors.orangeRed
   };
   return tagColors[tag] || "#999999";
 };
@@ -31,3 +31,13 @@ export const tagOptions = [
 ];
 
 export const priorityOptions = ["Low", "Medium", "High"];
+
+export interface Task {
+  id: string;
+  task_name: string;
+  tag: string;
+  priority: string;
+  due_date: string;
+  estimated_time: string;
+  is_complete: boolean;
+}
