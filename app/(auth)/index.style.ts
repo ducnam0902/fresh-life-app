@@ -6,58 +6,103 @@ const windowHeight = Dimensions.get("window").height;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "center",
-    backgroundColor: COLORS.backgroundLight,
-    paddingHorizontal: 20,
-    paddingTop: windowHeight * 0.2,
+    backgroundColor: COLORS.colors.background,
   },
-  logo: {
-    width: 180,
-    height: 180,
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: 700,
-    marginBottom: 12,
-  },
-  subTitle: {
-    fontSize: 18,
-    marginBottom: 16,
-    color: COLORS.textSecondary,
-    fontWeight: 500,
-    paddingHorizontal: 5,
-    textAlign: "center",
-  },
-  signInButton: {
-    marginTop: 16,
-    paddingVertical: 16,
-    paddingHorizontal: "auto",
-    borderRadius: 12,
-    backgroundColor: COLORS.primary,
+
+  backgroundGradient: {
+    flex: 1,
     width: "100%",
-    display: "flex",
+  },
+
+  scrollContent: {
+    flexGrow: 1,
+    paddingHorizontal: 24,
+    paddingTop: 40,
+    paddingBottom: 40,
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "row",
   },
-  signInIcon: {
-    backgroundColor: COLORS.primary,
-    borderRadius: 20,
-    padding: 4,
-    marginRight: 12,
+
+  // Logo Section
+  logoContainer: {
+    alignItems: "center",
+    marginBottom: 32,
+    marginTop: 40,
   },
-  signInText: {
-    fontWeight: 600,
-    fontSize: 18,
-    color: COLORS.textMain,
+
+  logoBadge: {
+    width: 100,
+    height: 100,
+    borderRadius: 9999,
+    backgroundColor: COLORS.colors.surface,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: COLORS.colors.border,
+    shadowColor: COLORS.colors.primary,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    elevation: 8,
+  },
+
+  // Title Section
+  titleContainer: {
+    alignItems: "center",
+    marginBottom: 48,
+  },
+
+  title: {
+    fontSize: 28,
+    fontWeight: "700",
+    color: COLORS.colors.text.primary,
+    marginBottom: 12,
+    letterSpacing: 0.5,
+    fontFamily: COLORS.typography.fontFamily,
+  },
+
+  subtitle: {
+    fontSize: 15,
+    fontWeight: "400",
+    color: COLORS.colors.text.secondary,
     textAlign: "center",
-    marginLeft: 8,
+    lineHeight: 24,
+    fontFamily: COLORS.typography.fontFamily,
   },
+
+  // Google Sign In Button
+  googleButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: COLORS.colors.text.primary,
+    borderRadius: 24,
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    marginBottom: 24,
+    width: "100%",
+    minHeight: 54,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+
+  googleButtonPressed: {
+    opacity: 0.8,
+  },
+
   googleIcon: {
-    width: 24,
-    height: 24,
+    marginRight: 12,
+    fontWeight: "600",
+  },
+
+  googleButtonText: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: COLORS.colors.text.onPrimary,
+    letterSpacing: 0.3,
+    fontFamily: COLORS.typography.fontFamily,
   },
 });
 

@@ -1,35 +1,26 @@
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-  Pressable,
-  Alert,
-} from "react-native";
-import React, { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import moment from "moment";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import styles from "@/utils/addTask.style";
-import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/color";
-import { useRouter } from "expo-router";
-import { supabase } from "@/utils/supabase";
-import { useAuthStore } from "../../store/authStore";
 import { useLoadingStore } from "@/store/loadingStore";
-
-const tagOptions = [
-  "Personal",
-  "Work",
-  "Health",
-  "Shopping",
-  "Development",
-  "Finance",
-];
-const priorityOptions = ["Low", "Medium", "High"];
+import styles from "@/utils/addTask.style";
+import tasksServices from "@/utils/taskServices";
+import { priorityOptions, tagOptions } from "@/utils/tasksUtils";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { zodResolver } from "@hookform/resolvers/zod";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { useRouter } from "expo-router";
+import moment from "moment";
+import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import {
+    Pressable,
+    ScrollView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
+} from "react-native";
+import Toast from "react-native-toast-message";
+import * as z from "zod";
+import { useAuthStore } from "../../store/authStore";
 
 // Zod validation schema
 const taskSchema = z.object({
@@ -42,12 +33,12 @@ const taskSchema = z.object({
   dueDate: z
     .string()
     .refine(
-      (val) => !val || /^\d{2}\/\d{2}\/\d{4}$/.test(val),
-      "Due date must be in DD/MM/YYYY format"
+      (val) => !val || /^\d{2}\-\d{2}\-\d{4}$/.test(val),
+      "Due date must be in DD-MM-YYYY format"
     )
     .refine((val) => {
       if (!val) return true;
-      const [day, month, year] = val.split("/").map(Number);
+      const [day, month, year] = val.split("-").map(Number);
       const date = new Date(year, month - 1, day);
       return (
         date.getFullYear() === year &&
@@ -99,7 +90,7 @@ const AddTaskModal = () => {
       taskName: "",
       tag: tagOptions[1],
       priority: priorityOptions[1],
-      dueDate: moment().format("DD/MM/YYYY"),
+      dueDate: moment().format("DD-MM-YYYY"),
       estimatedTime: "20:00",
     },
   });
@@ -115,7 +106,7 @@ const AddTaskModal = () => {
       const day = String(selectedDate.getDate()).padStart(2, "0");
       const month = String(selectedDate.getMonth() + 1).padStart(2, "0");
       const year = selectedDate.getFullYear();
-      const formattedDate = `${day}/${month}/${year}`;
+      const formattedDate = `${day}-${month}-${year}`;
       setValue("dueDate", formattedDate);
     }
     setShowDatePicker(false);
@@ -139,35 +130,30 @@ const AddTaskModal = () => {
 
   const onSubmit = async (data: TaskFormData) => {
     try {
-        setLoading(true);
-      // Insert task data into tasks table
-      const { data: insertedData, error: insertError } = await supabase
-        .from("Tasks")
-        .insert([
-          {
-            user_id: userInfo?.id,
-            task_name: data.taskName,
-            tag: data.tag,
-            priority: data.priority,
-            due_date: data.dueDate,
-            estimated_time: data.estimatedTime,
-          },
-        ])
-        .select();
+      setLoading(true);
+      const res = await tasksServices.createTask({
+        id: userInfo?.id,
+        ...data,
+      });
 
-      if (insertError) {
-        Alert.alert("Error", `Failed to create task: ${insertError.message}`);
-        return;
+      if (res.length > 0) {
+        reset();
+        router.replace("/(tab)/tasks");
+        Toast.show({
+          type: "success",
+          text1: "Success",
+          text2: "Task added successfully!",
+        });
       }
-
-      Alert.alert("Success", "Task added successfully!");
-      reset();
-      router.push("/(tab)/tasks");
     } catch (error) {
       console.error("Error submitting task:", error);
-      Alert.alert("Error", "An unexpected error occurred");
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "An unexpected error occurred",
+      });
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   };
 
@@ -180,10 +166,15 @@ const AddTaskModal = () => {
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Header */}
       <View style={styles.headerTitle}>
-        <Text style={styles.newTaskTitle}>New Task</Text>
-        <Pressable onPress={handleCancel}>
-          <Ionicons name="close-outline" size={28} color={COLORS.textMain} />
+        <Pressable onPress={handleCancel} style={styles.backButton}>
+          <Ionicons
+            name="chevron-back"
+            size={28}
+            color={COLORS.colors.text.primary}
+          />
         </Pressable>
+        <Text style={styles.newTaskTitle}>New Task</Text>
+        <View style={{ width: 28 }} />
       </View>
 
       {/* Task Name Input */}
@@ -196,8 +187,8 @@ const AddTaskModal = () => {
             <>
               <TextInput
                 style={styles.taskNameInput}
-                placeholder="What are you going to do?"
-                placeholderTextColor={COLORS.textSecondary}
+                placeholder="What do you want to accomplish?"
+                placeholderTextColor={COLORS.colors.text.secondary}
                 value={value}
                 onChangeText={onChange}
                 onBlur={onBlur}
@@ -210,9 +201,9 @@ const AddTaskModal = () => {
         />
       </View>
 
-      {/* Tag Selection */}
+      {/* Category/Tag Selection */}
       <View style={styles.formSection}>
-        <Text style={styles.sectionLabel}>TAG</Text>
+        <Text style={styles.sectionLabel}>CATEGORY</Text>
         <Controller
           control={control}
           name="tag"
@@ -274,9 +265,11 @@ const AddTaskModal = () => {
         />
       </View>
 
-      {/* Due Date Input */}
+      {/* Due Date & Time Section */}
       <View style={styles.formSection}>
-        <Text style={styles.sectionLabel}>DUE DATE</Text>
+        <Text style={styles.sectionLabel}>DUE DATE & TIME</Text>
+
+        {/* Due Date */}
         <Controller
           control={control}
           name="dueDate"
@@ -286,18 +279,22 @@ const AddTaskModal = () => {
                 style={styles.dueDateContainer}
                 onPress={() => setShowDatePicker(true)}
               >
-                <TextInput
-                  style={styles.dueDateInput}
-                  placeholder="DD/MM/YYYY"
-                  placeholderTextColor={COLORS.textSecondary}
-                  value={value}
-                  editable={false}
-                  pointerEvents="none"
+                <MaterialCommunityIcons
+                  name="calendar"
+                  size={20}
+                  color={COLORS.colors.primary}
+                  style={styles.dateIcon}
                 />
+                <Text style={styles.dueDateText}>
+                  {value
+                    ? `${moment(value, "DD-MM-YYYY").format("ddd, MMM DD")}`
+                    : "Select date"}
+                </Text>
                 <Ionicons
-                  name="calendar-outline"
-                  size={24}
-                  color={COLORS.textMain}
+                  name="chevron-forward"
+                  size={20}
+                  color={COLORS.colors.text.secondary}
+                  style={styles.chevronIcon}
                 />
               </Pressable>
               {errors.dueDate && (
@@ -306,23 +303,22 @@ const AddTaskModal = () => {
             </>
           )}
         />
+
         {showDatePicker && (
           <DateTimePicker
             value={
               getValues("dueDate")
-                ? new Date(getValues("dueDate").split("/").reverse().join("-"))
+                ? new Date(getValues("dueDate").split("-").reverse().join("-"))
                 : new Date()
             }
             mode="date"
             display="default"
             onChange={handleDateChange}
+            minimumDate={new Date()}
           />
         )}
-      </View>
 
-      {/* Estimated Time Input */}
-      <View style={styles.formSection}>
-        <Text style={styles.sectionLabel}>ESTIMATED TIME</Text>
+        {/* Estimated Time */}
         <Controller
           control={control}
           name="estimatedTime"
@@ -331,22 +327,25 @@ const AddTaskModal = () => {
               style={styles.estimatedTimeContainer}
               onPress={() => setShowTimePicker(true)}
             >
-              <TextInput
-                style={styles.estimatedTimeInput}
-                placeholder="HH:MM"
-                placeholderTextColor={COLORS.textSecondary}
-                value={value}
-                editable={false}
-                pointerEvents="none"
+              <MaterialCommunityIcons
+                name="clock"
+                size={20}
+                color={COLORS.colors.primary}
+                style={styles.timeIcon}
               />
+              <Text style={styles.estimatedTimeText}>
+                {value ? `${value}` : "Select time"}
+              </Text>
               <Ionicons
-                name="time-outline"
-                size={24}
-                color={COLORS.textSecondary}
+                name="chevron-forward"
+                size={20}
+                color={COLORS.colors.text.secondary}
+                style={styles.chevronIcon}
               />
             </Pressable>
           )}
         />
+
         {showTimePicker && (
           <DateTimePicker
             value={
@@ -357,21 +356,23 @@ const AddTaskModal = () => {
             mode="time"
             display="default"
             onChange={handleTimeChange}
+            is24Hour={true}
           />
         )}
       </View>
 
+      {/* Spacer */}
+      <View style={styles.spacer} />
+
       {/* Action Buttons */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          style={styles.addTaskButton}
+          style={styles.createTaskButton}
           onPress={handleSubmit(onSubmit)}
+          activeOpacity={0.8}
         >
-          <Text style={styles.addTaskButtonText}>Add Task</Text>
+          <Text style={styles.createTaskButtonText}>Create Task</Text>
         </TouchableOpacity>
-        <Pressable onPress={handleCancel}>
-          <Text style={styles.cancelButtonText}>Cancel</Text>
-        </Pressable>
       </View>
     </ScrollView>
   );
