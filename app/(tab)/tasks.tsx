@@ -11,7 +11,6 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
 import { ProgressChart } from "react-native-chart-kit";
-import Toast from "react-native-toast-message";
 
 const chartConfig = {
   backgroundGradientFrom: COLORS.colors.surface,

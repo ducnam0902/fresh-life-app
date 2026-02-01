@@ -57,7 +57,7 @@ export default function ExpenseDetailsScreen() {
       </View>
     );
   }
-  console.log("Expense Details:", expense);
+
   const tagColor = getTagColorExpense(expense.tag);
 
   return (
