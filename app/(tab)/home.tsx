@@ -3,18 +3,29 @@ import { useAuthStore } from "@/store/authStore";
 import { useLoadingStore } from "@/store/loadingStore";
 import styles from "@/utils/home.style";
 import { supabase } from "@/utils/supabase";
+import tasksServices from "@/utils/taskServices";
+import { Task } from "@/utils/tasksUtils";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import moment from "moment";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Dimensions, Pressable, Text, View } from "react-native";
-import { LineChart } from "react-native-chart-kit";
+import { LineChart, ProgressChart } from "react-native-chart-kit";
 import { ScrollView } from "react-native-gesture-handler";
 
-const today = moment().format("ddd, MMM DD");
+const chartTasksConfig = {
+  backgroundGradientFrom: COLORS.colors.surface,
+  backgroundGradientFromOpacity: 0,
+  backgroundGradientTo: COLORS.colors.surface,
+  backgroundGradientToOpacity: 0.5,
+  color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+  strokeWidth: 2, // optional, default 3
+  barPercentage: 0.5,
+  useShadowColorFromDataset: false, // optional
+};
 
 const chartData = {
   labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
@@ -30,6 +41,18 @@ const chartData = {
 const Home = () => {
   const { userInfo, setUser } = useAuthStore();
   const { setLoading } = useLoadingStore();
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const completedTask = tasks.filter((task) => task.is_complete).length;
+  const data = {
+    data: [
+      isNaN(completedTask / tasks.length) ? 0 : completedTask / tasks.length,
+    ],
+  };
+  const percentValue = Math.round(
+    isNaN(completedTask / tasks.length)
+      ? 0
+      : (completedTask / tasks.length) * 100,
+  );
   const handleLogout = async () => {
     try {
       setLoading(true);
@@ -42,6 +65,24 @@ const Home = () => {
       setLoading(false);
     }
   };
+
+  const fetchTasks = async () => {
+    try {
+      setLoading(true);
+      const data = await tasksServices.fetchTasks(
+        userInfo?.id.toString() ?? "",
+      );
+      setTasks(data || []);
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
@@ -100,10 +141,7 @@ const Home = () => {
       {/* Task Progress Section */}
       <View style={styles.sectionContainer}>
         <Text style={styles.sectionTitle}>Task Progress</Text>
-        <LinearGradient
-          colors={[COLORS.colors.surface, COLORS.colors.surfaceLight]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
+        <View
           style={styles.taskProgressCard}
         >
           <View style={styles.taskProgressContent}>
@@ -111,21 +149,22 @@ const Home = () => {
               <View
                 style={[styles.circleProgress, { width: 140, height: 140 }]}
               >
-                <View
-                  style={[
-                    styles.circleProgressInner,
-                    {
-                      width: 120,
-                      height: 120,
-                      borderTopColor: COLORS.colors.primary,
-                      borderRightColor: COLORS.colors.primary,
-                      borderBottomColor: COLORS.colors.text.muted,
-                      borderLeftColor: COLORS.colors.text.muted,
-                    },
-                  ]}
-                >
-                  <View style={styles.circleProgressText}>
-                    <Text style={styles.progressPercentage}>{100}%</Text>
+                <View style={styles.circleProgressText}>
+                  <ProgressChart
+                    data={data}
+                    width={135}
+                    height={130}
+                    strokeWidth={8}
+                    radius={60}
+                    chartConfig={chartTasksConfig}
+                    hideLegend={true}
+                    style={styles.progressChart}
+                  />
+
+                  <View style={styles.progressTextContent}>
+                    <Text style={styles.progressPercentage}>
+                        {percentValue}%
+                    </Text>
                     <Text style={styles.progressLabel}>DONE</Text>
                   </View>
                 </View>
@@ -142,20 +181,7 @@ const Home = () => {
                 />
                 <View>
                   <Text style={styles.statLabel}>Done</Text>
-                  <Text style={styles.statValue}>{10} Tasks</Text>
-                </View>
-              </View>
-
-              <View style={styles.taskStatItem}>
-                <View
-                  style={[
-                    styles.statDot,
-                    { backgroundColor: COLORS.colors.primary },
-                  ]}
-                />
-                <View>
-                  <Text style={styles.statLabel}>In Progress</Text>
-                  <Text style={styles.statValue}>{3} Tasks</Text>
+                  <Text style={styles.statValue}>{completedTask} Tasks</Text>
                 </View>
               </View>
 
@@ -168,12 +194,14 @@ const Home = () => {
                 />
                 <View>
                   <Text style={styles.statLabel}>To Do</Text>
-                  <Text style={styles.statValue}>{5} Tasks</Text>
+                  <Text style={styles.statValue}>
+                    {tasks.length - completedTask} Tasks
+                  </Text>
                 </View>
               </View>
             </View>
           </View>
-        </LinearGradient>
+        </View>
       </View>
 
       {/* Budget Tracker Section */}

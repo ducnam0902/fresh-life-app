@@ -31,18 +31,10 @@ const styles = StyleSheet.create({
   },
 
   logoBadge: {
-    width: 100,
-    height: 100,
-    borderRadius: 9999,
-    backgroundColor: COLORS.colors.surface,
+    width: 150,
+    height: 150,
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: COLORS.colors.border,
-    shadowColor: COLORS.colors.primary,
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
     elevation: 8,
   },
 

@@ -2,7 +2,7 @@ import { COLORS } from "@/constants/color";
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-    container: {
+  container: {
     flex: 1,
     backgroundColor: COLORS.colors.background,
   },
@@ -129,22 +129,28 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  circleProgressInner: {
-    borderRadius: 60,
-    borderWidth: 8,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
   circleProgressText: {
     alignItems: "center",
+    position: "relative",
+  },
+
+  progressChart: {},
+
+  progressTextContent: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    zIndex: 5,
+    alignItems: "center",
+    transform: [{ translateX: "-50%" }, { translateY: "-50%" }],
   },
 
   progressPercentage: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: "700",
     color: COLORS.colors.primary,
     fontFamily: COLORS.typography.fontFamily,
+    alignContent: "center",
   },
 
   progressLabel: {
@@ -314,7 +320,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-  }
+  },
 });
 
 export default styles;
