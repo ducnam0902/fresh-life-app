@@ -42,7 +42,26 @@ export default function RootLayout() {
               }}
             />
             <Stack.Screen
+              name="(modal)/addExpense"
+              options={{
+                headerShown: false,
+                presentation: "modal",
+              }}
+            />
+            <Stack.Screen
               name="(screens)/TaskDetails/[id]"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="(screens)/BudgetPeriod/index"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="(screens)/ExpenseDetails/[id]"
               options={{
                 headerShown: false,
               }}

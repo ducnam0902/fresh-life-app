@@ -1,12 +1,238 @@
-import React from 'react'
-import { Text, View } from 'react-native'
+import { useAuthStore } from "@/store/authStore";
+import budgetServices from "@/utils/budgetServices";
+import React, { useEffect, useState } from "react";
+import { FlatList, Pressable, Text, View } from "react-native";
+import moment from "moment";
+import { Link, useRouter } from "expo-router";
+import { useLoadingStore } from "@/store/loadingStore";
+import styles from "@/utils/budget.styles";
+import {
+  BudgetPeriod,
+  DailyExpenses,
+  getTagColorExpense,
+} from "@/utils/budgetUtils";
+import { Image } from "expo-image";
+import { COLORS } from "@/constants/color";
+import { Ionicons } from "@expo/vector-icons";
+import { getTagColor } from "@/utils/tasksUtils";
+
+const todayDate = moment().format("DD-MM-YYYY");
 
 const Budget = () => {
-  return (
-    <View>
-      <Text>Budget</Text>
-    </View>
-  )
-}
+  const userInfo = useAuthStore((state) => state.userInfo);
+  const [budgetPeriod, setBudgetPeriod] = useState<BudgetPeriod | null>(null);
+  const [expenses, setExpenses] = useState<DailyExpenses[]>([]);
+  const { setLoading } = useLoadingStore();
+  const totalExpensesToday = expenses.reduce(
+    (sum, expense) => sum + expense.amount,
+    0,
+  );
+  const remainingExpenseToday =
+    totalExpensesToday - (budgetPeriod?.amount ?? 0);
+  const compareExpenseToday = budgetPeriod?.amount
+    ? totalExpensesToday > budgetPeriod?.amount
+    : false;
+  const router = useRouter();
 
-export default Budget
+  const fetchBudgetPeriods = async () => {
+    try {
+      setLoading(true);
+      const data = await budgetServices.checkBudgetPeriod(
+        userInfo?.id ?? 0,
+        todayDate,
+      );
+      if (data.length === 0) {
+        router.push("/BudgetPeriod");
+        return;
+      }
+
+      setBudgetPeriod(data[0]);
+
+      const expensesTodayList = await budgetServices.fetchExpenseToday(
+        userInfo?.id ?? 0,
+        todayDate,
+      );
+
+      setExpenses(expensesTodayList || []);
+    } catch (error) {
+      console.error("Error fetching budget periods:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBudgetPeriods();
+  }, []);
+
+  const calculateUsagePercentage = (): number => {
+    if (!budgetPeriod) return 0;
+    return Math.round((totalExpensesToday / budgetPeriod.amount) * 100);
+  };
+
+  const ListHeaderComponent = () => (
+    <View>
+      {/* Header with user info */}
+      <View style={styles.header}>
+        <View style={styles.userContainer}>
+          <Image
+            source={{ uri: userInfo?.avatar ?? "" }}
+            style={styles.userAvatar}
+            contentFit="cover"
+          />
+          <View>
+            <Text style={styles.greeting}>Hello, {userInfo?.name}</Text>
+            <Text style={styles.date}>{moment().format("dddd, MMM DD")}</Text>
+          </View>
+        </View>
+
+        <Link href="/(modal)/addExpense" asChild>
+          <Pressable style={styles.addButton}>
+            <Ionicons name="add" size={24} color={COLORS.colors.background} />
+          </Pressable>
+        </Link>
+      </View>
+
+      {/* My Budget Title */}
+      <Text style={styles.myBudgetTitle}>My Budget</Text>
+
+      {/* Budget Summary Card */}
+      <View style={styles.budgetSummaryCard}>
+        <View style={styles.budgetStats}>
+          <View style={styles.statColumn}>
+            <Text style={styles.statLabel}>REMAINING</Text>
+            <View style={styles.remainingContainer}>
+              <Text
+                style={{
+                  ...styles.remainingAmount,
+                  color: compareExpenseToday
+                    ? COLORS.colors.error
+                    : COLORS.colors.primary,
+                }}
+              >
+                {compareExpenseToday && "-"}
+                {remainingExpenseToday.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") }
+              </Text>
+              <Text style={styles.statCurrency}>VND</Text>
+            </View>
+          </View>
+
+          <View style={styles.verticalDivider} />
+
+          <View style={styles.statColumn}>
+            <Text style={styles.statLabel}>TODAY BUDGET</Text>
+            <View style={styles.budgetContainer}>
+              <Text style={styles.budgetAmount}>
+                {budgetPeriod?.amount
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ".") ?? 0}
+              </Text>
+              <Text style={styles.statCurrency}>VND</Text>
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.usageSection}>
+          <View style={styles.usageHeader}>
+            <Text style={styles.usageLabel}>USAGE</Text>
+            <Text
+              style={{
+                ...styles.usagePercentage,
+                color: compareExpenseToday
+                  ? COLORS.colors.error
+                  : COLORS.colors.primary,
+              }}
+            >
+              {calculateUsagePercentage()}%
+            </Text>
+          </View>
+          <View style={styles.progressBarContainer}>
+            <View
+              style={[
+                styles.progressBar,
+                {
+                  width: `${Math.min(calculateUsagePercentage(), 100)}%`,
+                  backgroundColor: compareExpenseToday
+                    ? COLORS.colors.error
+                    : COLORS.colors.primary,
+                },
+              ]}
+            />
+          </View>
+        </View>
+      </View>
+
+      {/* Recent Activity Header */}
+      <View style={styles.recentActivityHeader}>
+        <Text style={styles.recentActivityTitle}>RECENT ACTIVITY</Text>
+      </View>
+    </View>
+  );
+
+  const handleViewExpense = (expense: DailyExpenses) => {
+    router.push({
+      pathname: "/(screens)/ExpenseDetails/[id]",
+      params: { id: expense.id?.toString() || "" },
+    });
+  };
+
+  const renderExpenseItem = ({ item }: { item: DailyExpenses }) => (
+    <Pressable
+      style={styles.expenseItem}
+      onPress={() => handleViewExpense(item)}
+    >
+      <View style={styles.expenseContent}>
+        <View style={styles.expenseTextContainer}>
+          <Text style={styles.expenseName}>{item.name}</Text>
+          {item.reason.length > 0 && (
+            <Text style={styles.expenseReason}>{item.reason}</Text>
+          )}
+        </View>
+        <View>
+          <Text style={styles.expenseAmount}>
+            {item.amount.toLocaleString()} VND
+          </Text>
+          <View style={styles.expenseAmountContainer}>
+            <View
+              style={[
+                styles.expenseTagBadge,
+                { backgroundColor: `${getTagColorExpense(item.tag)}20` },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.expenseTagText,
+                  { color: getTagColorExpense(item.tag) },
+                ]}
+              >
+                {item.tag}
+              </Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    </Pressable>
+  );
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={expenses}
+        renderItem={renderExpenseItem}
+        keyExtractor={(item) => item.id?.toString() || Math.random().toString()}
+        ListHeaderComponent={ListHeaderComponent}
+        contentContainerStyle={styles.flatListContainer}
+        scrollEnabled={true}
+        ListEmptyComponent={
+          budgetPeriod ? (
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>No expenses yet</Text>
+            </View>
+          ) : null
+        }
+      />
+    </View>
+  );
+};
+
+export default Budget;
