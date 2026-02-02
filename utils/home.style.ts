@@ -192,134 +192,97 @@ const styles = StyleSheet.create({
     fontFamily: COLORS.typography.fontFamily,
   },
 
-  // Budget Card
-  budgetCard: {
-    borderRadius: 18,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: COLORS.colors.border,
-    overflow: "hidden",
-  },
-
-  budgetContent: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 24,
-    marginBottom: 16,
-  },
-
-  gaugeContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    width: 120,
-  },
-
-  gaugeChart: {
-    width: 100,
-    height: 60,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  gaugeArc: {
-    width: 80,
-    height: 40,
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
-    borderWidth: 6,
-    borderBottomWidth: 0,
-    borderLeftColor: COLORS.colors.border,
-    borderRightColor: COLORS.colors.border,
-  },
-
-  gaugeLabel: {
-    marginTop: 8,
-  },
-
-  gaugeText: {
-    fontSize: 11,
-    fontWeight: "600",
-    color: COLORS.colors.primary,
-    fontFamily: COLORS.typography.fontFamily,
-  },
-
-  budgetInfo: {
-    flex: 1,
-  },
-
-  budgetTitle: {
-    fontSize: 12,
-    fontWeight: "600",
-    color: COLORS.colors.text.secondary,
-    marginBottom: 8,
-    fontFamily: COLORS.typography.fontFamily,
-  },
-
-  budgetAmount: {
-    fontSize: 24,
-    fontWeight: "700",
-    color: COLORS.colors.text.primary,
-    fontFamily: COLORS.typography.fontFamily,
-  },
-
-  budgetSubtext: {
-    fontSize: 13,
-    fontWeight: "400",
-    color: COLORS.colors.text.secondary,
-    marginTop: 4,
-    fontFamily: COLORS.typography.fontFamily,
-  },
-
-  budgetExpense: {
-    color: COLORS.colors.text.primary,
-    fontWeight: "500",
-  },
-
-  budgetDivider: {
-    height: 1,
-    backgroundColor: COLORS.colors.border,
-    marginVertical: 16,
-  },
-
-  trendSection: {
-    gap: 12,
-  },
-
-  trendHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-
-  trendLabel: {
-    fontSize: 12,
-    fontWeight: "600",
-    color: COLORS.colors.text.secondary,
-    fontFamily: COLORS.typography.fontFamily,
-  },
-
-  trendValue: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 4,
-  },
-
-  trendPercent: {
-    fontSize: 13,
-    fontWeight: "600",
-    color: COLORS.colors.primary,
-    fontFamily: COLORS.typography.fontFamily,
-  },
-
-  lineChart: {
-    marginVertical: 8,
-    borderRadius: 8,
-  },
-
   groupButton: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+  },
+
+  budgetCard: {
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: COLORS.colors.border,
+  },
+  budgetLabel: {
+    fontSize: 14,
+    color: COLORS.colors.text.secondary,
+    fontWeight: "500",
+    marginBottom: 8,
+    textAlign: "center",
+  },
+  amountContainer: {
+    flexDirection: "row",
+    alignItems: "baseline",
+    marginBottom: 8,
+    justifyContent: "center",
+  },
+  amountValue: {
+    fontSize: 32,
+    fontWeight: "700",
+    color: COLORS.colors.primary,
+    marginRight: 8,
+  },
+  currencyLabel: {
+    fontSize: 16,
+    color: COLORS.colors.primary,
+    fontWeight: "600",
+  },
+  remainingText: {
+    fontSize: 16,
+    color: COLORS.colors.text.secondary,
+    marginBottom: 16,
+    textAlign: "center",
+  },
+  remainingAmount: {
+    color: COLORS.colors.text.primary,
+    fontWeight: "600",
+  },
+  progressBarContainer: {
+    height: 8,
+    backgroundColor: COLORS.colors.border,
+    borderRadius: 4,
+    overflow: "hidden",
+  },
+
+  progressBar: {
+    height: "100%",
+    backgroundColor: COLORS.colors.primary,
+    borderRadius: 4,
+  },
+
+  // No Budget Container
+  noBudgetContainer: {
+    marginHorizontal: 16,
+    marginBottom: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 20,
+    backgroundColor: COLORS.colors.surface,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: COLORS.colors.border,
+    alignItems: "center",
+    gap: 12,
+  },
+  budgetItemsContainer: {
+    marginTop: 12,
+    gap: 12,
+  },
+  budgetItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  budgetItemLabel: {
+    fontSize: 15,
+    color: COLORS.colors.text.secondary,
+    fontWeight: "400",
+  },
+  budgetItemAmount: {
+    fontSize: 15,
+    color: COLORS.colors.text.primary,
+    fontWeight: "600",
   },
 });
 

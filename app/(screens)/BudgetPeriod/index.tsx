@@ -12,15 +12,16 @@ import moment from "moment";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
-    ActivityIndicator,
-    Pressable,
-    ScrollView,
-    Text,
-    TextInput,
-    View
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
 } from "react-native";
 import Toast from "react-native-toast-message";
 import * as z from "zod";
+import { formatCurrencyVND } from "../../../utils/budgetUtils";
 
 const budgetSchema = z.object({
   name: z.string().min(1, "Budget name is required"),
@@ -28,13 +29,13 @@ const budgetSchema = z.object({
     .string()
     .refine(
       (val) => !val || /^\w+\s\d{2},\s\d{4}$/.test(val),
-      "Start date is required"
+      "Start date is required",
     ),
   endDate: z
     .string()
     .refine(
       (val) => !val || /^\w+\s\d{2},\s\d{4}$/.test(val),
-      "End date is required"
+      "End date is required",
     ),
   amount: z.string().min(1, "Budget amount is required"),
 });
@@ -100,7 +101,7 @@ const BudgetPeriodScreen = () => {
       const endDateObj = moment(data.endDate, "MMM DD, YYYY");
 
       const amountValue = parseFloat(
-        data.amount.replace(/\./g, "").replace(/,/g, ".")
+        data.amount.replace(/\./g, "").replace(/,/g, "."),
       );
 
       const budgetPayload: BudgetPeriod = {
@@ -135,7 +136,7 @@ const BudgetPeriodScreen = () => {
     const numericValue = text.replace(/\D/g, "");
 
     // Format number with dots as thousand separators
-    const formattedValue = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    const formattedValue = formatCurrencyVND(Number(numericValue));
     return formattedValue;
   };
 

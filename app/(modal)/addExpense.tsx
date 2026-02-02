@@ -22,6 +22,7 @@ import { useLoadingStore } from "@/store/loadingStore";
 import budgetServices from "@/utils/budgetServices";
 import { DailyExpenses } from "@/utils/budgetUtils";
 import Toast from "react-native-toast-message";
+import { formatCurrencyVND } from "../../utils/budgetUtils";
 
 const expenseCategories = ["Eating", "Drink", "Transport", "Shopping", "Other"];
 
@@ -69,7 +70,7 @@ const AddExpenseModal = () => {
   const formatCurrency = (value: string): string => {
     const numericValue = value.replace(/\D/g, "");
     if (!numericValue) return "";
-    return numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    return formatCurrencyVND(Number(numericValue));
   };
 
   const handleAmountChange = (value: string) => {

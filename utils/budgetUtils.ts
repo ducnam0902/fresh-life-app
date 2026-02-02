@@ -20,6 +20,16 @@ export interface DailyExpenses {
   created_at?: string;
 }
 
+export interface IExpenseGroup {
+  totalExpenseToday: number;
+  Eating: number;
+  Drink: number;
+  Transport: number;
+  Shopping: number;
+  Other: number;
+  budgetToday: number;
+}
+
 export const getTagColorExpense = (tag: string): string => {
   const tagColors: { [key: string]: string } = {
     Eating: COLORS.colors.orangeColor,
@@ -30,3 +40,6 @@ export const getTagColorExpense = (tag: string): string => {
   };
   return tagColors[tag] || "#999999";
 };
+
+export const formatCurrencyVND = (money: number) =>
+  money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");

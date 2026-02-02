@@ -9,6 +9,7 @@ import styles from "@/utils/budget.styles";
 import {
   BudgetPeriod,
   DailyExpenses,
+  formatCurrencyVND,
   getTagColorExpense,
 } from "@/utils/budgetUtils";
 import { Image } from "expo-image";
@@ -28,12 +29,11 @@ const Budget = () => {
     0,
   );
   const remainingExpenseToday =
-    totalExpensesToday - (budgetPeriod?.amount ?? 0);
-  const compareExpenseToday = budgetPeriod?.amount
+    (budgetPeriod?.amount ?? 0) - totalExpensesToday;
+  const isOverBudgetToday = budgetPeriod?.amount
     ? totalExpensesToday > budgetPeriod?.amount
     : false;
   const router = useRouter();
-
   const fetchBudgetPeriods = async () => {
     try {
       setLoading(true);
@@ -105,13 +105,12 @@ const Budget = () => {
               <Text
                 style={{
                   ...styles.remainingAmount,
-                  color: compareExpenseToday
+                  color: isOverBudgetToday
                     ? COLORS.colors.error
                     : COLORS.colors.primary,
                 }}
               >
-                {compareExpenseToday && "-"}
-                {remainingExpenseToday.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") }
+                {formatCurrencyVND(remainingExpenseToday)}
               </Text>
               <Text style={styles.statCurrency}>VND</Text>
             </View>
@@ -123,9 +122,7 @@ const Budget = () => {
             <Text style={styles.statLabel}>TODAY BUDGET</Text>
             <View style={styles.budgetContainer}>
               <Text style={styles.budgetAmount}>
-                {budgetPeriod?.amount
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ".") ?? 0}
+                {formatCurrencyVND(budgetPeriod?.amount ?? 0)}
               </Text>
               <Text style={styles.statCurrency}>VND</Text>
             </View>
@@ -138,7 +135,7 @@ const Budget = () => {
             <Text
               style={{
                 ...styles.usagePercentage,
-                color: compareExpenseToday
+                color: isOverBudgetToday
                   ? COLORS.colors.error
                   : COLORS.colors.primary,
               }}
@@ -152,7 +149,7 @@ const Budget = () => {
                 styles.progressBar,
                 {
                   width: `${Math.min(calculateUsagePercentage(), 100)}%`,
-                  backgroundColor: compareExpenseToday
+                  backgroundColor: isOverBudgetToday
                     ? COLORS.colors.error
                     : COLORS.colors.primary,
                 },
