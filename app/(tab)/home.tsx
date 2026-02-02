@@ -1,6 +1,8 @@
 import { COLORS } from "@/constants/color";
 import { useAuthStore } from "@/store/authStore";
 import { useLoadingStore } from "@/store/loadingStore";
+import budgetServices from "@/utils/budgetServices";
+import { IExpenseGroup } from "@/utils/budgetUtils";
 import styles from "@/utils/home.style";
 import { supabase } from "@/utils/supabase";
 import tasksServices from "@/utils/taskServices";
@@ -15,6 +17,7 @@ import React, { useEffect, useState } from "react";
 import { Dimensions, Pressable, Text, View } from "react-native";
 import { LineChart, ProgressChart } from "react-native-chart-kit";
 import { ScrollView } from "react-native-gesture-handler";
+import { formatCurrencyVND } from "../../utils/budgetUtils";
 
 const chartTasksConfig = {
   backgroundGradientFrom: COLORS.colors.surface,
@@ -27,21 +30,20 @@ const chartTasksConfig = {
   useShadowColorFromDataset: false, // optional
 };
 
-const chartData = {
-  labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-  datasets: [
-    {
-      data: [1200000, 1500000, 1300000, 1800000, 1600000, 1400000, 1257500],
-      color: () => COLORS.colors.primary,
-      strokeWidth: 2,
-    },
-  ],
-};
-
+const today = moment().format("DD-MM-YYYY");
 const Home = () => {
   const { userInfo, setUser } = useAuthStore();
   const { setLoading } = useLoadingStore();
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [expenseData, setExpenseData] = useState<IExpenseGroup>({
+    totalExpenseToday: 0,
+    Eating: 0,
+    Drink: 0,
+    Transport: 0,
+    Shopping: 0,
+    Other: 0,
+    budgetToday: 0,
+  });
   const completedTask = tasks.filter((task) => task.is_complete).length;
   const data = {
     data: [
@@ -53,6 +55,10 @@ const Home = () => {
       ? 0
       : (completedTask / tasks.length) * 100,
   );
+  const isOverBudgetColor =
+    expenseData.totalExpenseToday > expenseData.budgetToday
+      ? COLORS.colors.error
+      : COLORS.colors.primary;
   const handleLogout = async () => {
     try {
       setLoading(true);
@@ -72,7 +78,13 @@ const Home = () => {
       const data = await tasksServices.fetchTasks(
         userInfo?.id.toString() ?? "",
       );
+
+      const expenseData = await budgetServices.fetchExpenseGroup(
+        userInfo?.id ?? 0,
+        today,
+      );
       setTasks(data || []);
+      setExpenseData(expenseData);
     } catch (error) {
       console.error("Error fetching tasks:", error);
     } finally {
@@ -141,9 +153,7 @@ const Home = () => {
       {/* Task Progress Section */}
       <View style={styles.sectionContainer}>
         <Text style={styles.sectionTitle}>Task Progress</Text>
-        <View
-          style={styles.taskProgressCard}
-        >
+        <View style={styles.taskProgressCard}>
           <View style={styles.taskProgressContent}>
             <View style={styles.circleProgressContainer}>
               <View
@@ -163,7 +173,7 @@ const Home = () => {
 
                   <View style={styles.progressTextContent}>
                     <Text style={styles.progressPercentage}>
-                        {percentValue}%
+                      {percentValue}%
                     </Text>
                     <Text style={styles.progressLabel}>DONE</Text>
                   </View>
@@ -208,80 +218,87 @@ const Home = () => {
       <View style={styles.sectionContainer}>
         <Text style={styles.sectionTitle}>Budget Tracker</Text>
         <LinearGradient
-          colors={[COLORS.colors.surface, COLORS.colors.surfaceLight]}
+          colors={[COLORS.colors.surfaceLight, COLORS.colors.surface]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.budgetCard}
         >
-          <View style={styles.budgetContent}>
-            {/* Gauge Chart */}
-            <View style={styles.gaugeContainer}>
-              <View style={styles.gaugeChart}>
-                <View
-                  style={[
-                    styles.gaugeArc,
-                    {
-                      borderTopColor: COLORS.colors.primary,
-                      borderRightColor: COLORS.colors.primary,
-                    },
-                  ]}
-                />
-              </View>
-              <View style={styles.gaugeLabel}>
-                <Text style={styles.gaugeText}>SAFE ZONE</Text>
-              </View>
-            </View>
+          {/* Daily Expenses Header */}
+          <Text style={styles.budgetLabel}>Daily Usage</Text>
 
-            {/* Budget Info */}
-            <View style={styles.budgetInfo}>
-              <Text style={styles.budgetTitle}>REMAINING TODAY</Text>
-              <Text style={styles.budgetAmount}>
-                {(3000 / 1000000).toFixed(1)}.000 VND
-              </Text>
-              <Text style={styles.budgetSubtext}>
-                Daily Expenses:{" "}
-                <Text style={styles.budgetExpense}>
-                  {(10000 / 1000000).toFixed(1)}/{(138999 / 1000000).toFixed(1)}
-                  .000 VND
-                </Text>
-              </Text>
-            </View>
+          {/* Amount Display */}
+          <View style={styles.amountContainer}>
+            <Text
+              style={{
+                ...styles.amountValue,
+                color: isOverBudgetColor,
+              }}
+            >
+              {formatCurrencyVND(expenseData.totalExpenseToday)}
+            </Text>
+            <Text
+              style={{
+                ...styles.currencyLabel,
+                color: isOverBudgetColor,
+              }}
+            >
+              VND
+            </Text>
           </View>
 
-          {/* Divider */}
-          <View style={styles.budgetDivider} />
+          {/* Budget Today */}
+          <Text style={styles.remainingText}>
+            Budget Today:{" "}
+            <Text style={styles.remainingAmount}>
+              {formatCurrencyVND(expenseData.budgetToday)} VND
+            </Text>
+          </Text>
 
-          {/* 7-Day Trend */}
-          <View style={styles.trendSection}>
-            <View style={styles.trendHeader}>
-              <Text style={styles.trendLabel}>7-DAY TREND</Text>
-              <View style={styles.trendValue}>
-                <MaterialCommunityIcons
-                  name="trending-up"
-                  size={16}
-                  color={COLORS.colors.primary}
-                />
-                <Text style={styles.trendPercent}>+{10}%</Text>
-              </View>
-            </View>
-
-            <LineChart
-              data={chartData}
-              width={Dimensions.get("window").width - 80}
-              height={100}
-              chartConfig={{
-                backgroundColor: "transparent",
-                backgroundGradientFrom: "transparent",
-                backgroundGradientTo: "transparent",
-                color: () => COLORS.colors.text.muted,
-                strokeWidth: 2,
-                useShadowColorFromDataset: false,
-              }}
-              style={styles.lineChart}
-              withDots={false}
-              withInnerLines={false}
-              withOuterLines={false}
+          {/* Progress Bar */}
+          <View style={styles.progressBarContainer}>
+            <View
+              style={[
+                styles.progressBar,
+                {
+                  width: `${Math.min(Math.round((expenseData.totalExpenseToday / expenseData.budgetToday) * 100), 100)}%`,
+                  backgroundColor: isOverBudgetColor,
+                },
+              ]}
             />
+          </View>
+
+          {/* Budget Items */}
+          <View style={styles.budgetItemsContainer}>
+            <View style={styles.budgetItem}>
+              <Text style={styles.budgetItemLabel}>Eating</Text>
+              <Text style={styles.budgetItemAmount}>
+                {formatCurrencyVND(expenseData.Eating)} VND
+              </Text>
+            </View>
+            <View style={styles.budgetItem}>
+              <Text style={styles.budgetItemLabel}>Drink</Text>
+              <Text style={styles.budgetItemAmount}>
+                {formatCurrencyVND(expenseData.Drink)} VND
+              </Text>
+            </View>
+            <View style={styles.budgetItem}>
+              <Text style={styles.budgetItemLabel}>Shopping</Text>
+              <Text style={styles.budgetItemAmount}>
+                {formatCurrencyVND(expenseData.Shopping)} VND
+              </Text>
+            </View>
+            <View style={styles.budgetItem}>
+              <Text style={styles.budgetItemLabel}>Transport</Text>
+              <Text style={styles.budgetItemAmount}>
+                {formatCurrencyVND(expenseData.Transport)} VND
+              </Text>
+            </View>
+            <View style={styles.budgetItem}>
+              <Text style={styles.budgetItemLabel}>Other</Text>
+              <Text style={styles.budgetItemAmount}>
+                {formatCurrencyVND(expenseData.Other)} VND
+              </Text>
+            </View>
           </View>
         </LinearGradient>
       </View>
