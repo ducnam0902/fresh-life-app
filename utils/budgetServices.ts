@@ -126,7 +126,7 @@ const budgetServices = {
 
     return {
       ...groupByData,
-      budgetToday: limitBudgetToday[0].amount ?? 0,
+      budgetToday: limitBudgetToday[0]?.amount ?? 0,
     };
   },
 };
