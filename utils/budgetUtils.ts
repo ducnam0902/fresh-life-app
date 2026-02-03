@@ -1,7 +1,7 @@
 import { COLORS } from "@/constants/color";
 
 export interface BudgetPeriod {
-  id: number;
+  id?: number;
   name: string;
   start_date: string;
   end_date: string;

@@ -16,17 +16,23 @@ const tasksServices = {
     }
     return data;
   },
-  completeTask: async (taskId: string) => {
-    const { data, error } = await supabase
-      .from("Tasks")
-      .update({ is_complete: true })
-      .eq("id", taskId)
-      .select();
+  completeTask: async (taskId: string, userId: number) => {
+    const taskInfo = await tasksServices.fetchTaskById(taskId);
+    if (taskInfo.user_id === userId) {
+      const { data, error } = await supabase
+        .from("Tasks")
+        .update({ is_complete: true })
+        .eq("id", taskId)
+        .select()
+        .single();
 
-    if (error) {
-      throw error;
+      if (error) {
+        throw error;
+      }
+      return data;
     }
-    return data;
+
+    return false;
   },
   createTask: async (taskData: any) => {
     const { data, error } = await supabase
@@ -59,7 +65,7 @@ const tasksServices = {
       throw error;
     }
     return data;
-  }
+  },
 };
 
 export default tasksServices;

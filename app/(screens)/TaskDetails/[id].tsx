@@ -1,4 +1,5 @@
 import { COLORS } from "@/constants/color";
+import { useAuthStore } from "@/store/authStore";
 import { useLoadingStore } from "@/store/loadingStore";
 import styles from "@/utils/taskDetails.style";
 import tasksServices from "@/utils/taskServices";
@@ -20,6 +21,7 @@ const TaskDetailsScreen = () => {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { isLoading, setLoading } = useLoadingStore();
+  const { userInfo } = useAuthStore();
   const [task, setTask] = useState<Task | null>(null);
 
   const fetchTaskDetails = async () => {
@@ -52,14 +54,22 @@ const TaskDetailsScreen = () => {
   const handleToggleComplete = async () => {
     try {
       setLoading(true);
-      const res = await tasksServices.completeTask(id);
-      if (res.length > 0) {
+      const res = await tasksServices.completeTask(id, userInfo?.id ?? 0);
+      if (res.id == id && res.is_complete === true) {
         Toast.show({
           type: "success",
           text1: "Success",
           text2: "Task completed successfully!",
         });
         router.push("/(tab)/tasks");
+      }
+      if (!res) {
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: "Failed to complete task",
+        });
+        router.back();
       }
     } catch (error) {
       console.error("Error updating task:", error);
@@ -76,7 +86,7 @@ const TaskDetailsScreen = () => {
   useEffect(() => {
     fetchTaskDetails();
   }, [id]);
-  
+
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       {isLoading && null}
