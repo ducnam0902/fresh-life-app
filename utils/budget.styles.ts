@@ -4,12 +4,16 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.colors.background,
+  },
+
+  header: {
+    paddingHorizontal: 16,
   },
 
   flatListContainer: {
     flexGrow: 1,
     paddingBottom: 20,
+    paddingTop: 16,
   },
 
   loadingContainer: {
@@ -18,67 +22,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  // Header
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-
-  userContainer: {
-    flexDirection: "row",
-    gap: 12,
-    alignItems: "center",
-    flex: 1,
-  },
-
-  userAvatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: COLORS.colors.surface,
-  },
-
-  greeting: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: COLORS.colors.text.primary,
-    fontFamily: COLORS.typography.fontFamily,
-  },
-
-  date: {
-    fontSize: 12,
-    fontWeight: "400",
-    color: COLORS.colors.text.secondary,
-    marginTop: 2,
-    fontFamily: COLORS.typography.fontFamily,
-  },
-
-  addButton: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: COLORS.colors.primary,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  // My Budget Title
-  myBudgetTitle: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: COLORS.colors.text.primary,
-    paddingHorizontal: 16,
-    marginTop: 8,
-    marginBottom: 12,
-    fontFamily: COLORS.typography.fontFamily,
-  },
-
   // Budget Summary Card
   budgetSummaryCard: {
-    marginHorizontal: 16,
+    marginTop: 16,
     marginBottom: 20,
     paddingHorizontal: 16,
     paddingVertical: 16,
@@ -224,25 +170,6 @@ const styles = StyleSheet.create({
     fontFamily: COLORS.typography.fontFamily,
   },
 
-  // Recent Activity Section
-  recentActivityHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    marginTop: 8,
-    marginBottom: 12,
-  },
-
-  recentActivityTitle: {
-    fontSize: 12,
-    fontWeight: "700",
-    color: COLORS.colors.text.secondary,
-    letterSpacing: 0.5,
-    textTransform: "uppercase",
-    fontFamily: COLORS.typography.fontFamily,
-  },
-
   viewAllLink: {
     fontSize: 13,
     fontWeight: "600",
@@ -316,7 +243,7 @@ const styles = StyleSheet.create({
     color: COLORS.colors.primary,
     fontFamily: COLORS.typography.fontFamily,
   },
-  
+
   // Empty State
   emptyContainer: {
     flex: 1,

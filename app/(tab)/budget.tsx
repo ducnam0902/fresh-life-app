@@ -1,5 +1,5 @@
 import { useAuthStore } from "@/store/authStore";
-import budgetServices from "@/utils/budgetServices";
+import budgetServices from "@/services/budgetServices";
 import React, { useEffect, useState } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
 import moment from "moment";
@@ -16,6 +16,9 @@ import { Image } from "expo-image";
 import { COLORS } from "@/constants/color";
 import { Ionicons } from "@expo/vector-icons";
 import { getTagColor } from "@/utils/tasksUtils";
+import Header from "@/components/Header";
+import { ScrollView } from "react-native-gesture-handler";
+import Title from "@/components/Title";
 
 const todayDate = moment().format("DD-MM-YYYY");
 
@@ -71,31 +74,9 @@ const Budget = () => {
   };
 
   const ListHeaderComponent = () => (
-    <View>
-      {/* Header with user info */}
-      <View style={styles.header}>
-        <View style={styles.userContainer}>
-          <Image
-            source={{ uri: userInfo?.avatar ?? "" }}
-            style={styles.userAvatar}
-            contentFit="cover"
-          />
-          <View>
-            <Text style={styles.greeting}>Hello, {userInfo?.name}</Text>
-            <Text style={styles.date}>{moment().format("dddd, MMM DD")}</Text>
-          </View>
-        </View>
-
-        <Link href="/(modal)/addExpense" asChild>
-          <Pressable style={styles.addButton}>
-            <Ionicons name="add" size={24} color={COLORS.colors.background} />
-          </Pressable>
-        </Link>
-      </View>
-
-      {/* My Budget Title */}
-      <Text style={styles.myBudgetTitle}>My Budget</Text>
-
+    <View style={styles.header}>
+        <Header link="/(modal)/addExpense" />
+        <Title title="My Budget" />
       {/* Budget Summary Card */}
       <View style={styles.budgetSummaryCard}>
         <View style={styles.budgetStats}>
@@ -159,10 +140,7 @@ const Budget = () => {
         </View>
       </View>
 
-      {/* Recent Activity Header */}
-      <View style={styles.recentActivityHeader}>
-        <Text style={styles.recentActivityTitle}>RECENT ACTIVITY</Text>
-      </View>
+      <Title title="Recent Activity" />
     </View>
   );
 

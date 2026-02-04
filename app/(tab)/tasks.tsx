@@ -1,8 +1,10 @@
+import Header from "@/components/Header";
+import Title from "@/components/Title";
 import { COLORS } from "@/constants/color";
 import { useAuthStore } from "@/store/authStore";
 import { useLoadingStore } from "@/store/loadingStore";
 import styles from "@/utils/task.style";
-import tasksServices from "@/utils/taskServices";
+import tasksServices from "@/services/taskServices";
 import { getPriorityColor, getTagColor, Task } from "@/utils/tasksUtils";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
@@ -43,14 +45,14 @@ const Tasks = () => {
   const percentValue = Math.round(
     isNaN(completedTask / tasks.length)
       ? 0
-      : (completedTask / tasks.length) * 100
+      : (completedTask / tasks.length) * 100,
   );
 
   const fetchTasks = async () => {
     try {
       setLoading(true);
       const data = await tasksServices.fetchTasks(
-        userInfo?.id.toString() ?? ""
+        userInfo?.id.toString() ?? "",
       );
       setTasks(data || []);
     } catch (error) {
@@ -66,7 +68,7 @@ const Tasks = () => {
 
   const renderTaskItem = ({ item }: { item: Task }) => {
     const dueDate = moment(
-      `${formatDateToYYYYMMDD(item.due_date)} ${item.estimated_time}:00`
+      `${formatDateToYYYYMMDD(item.due_date)} ${item.estimated_time}:00`,
     );
     const duration = moment.duration(dueDate.diff(moment())).milliseconds() > 0;
     return (
@@ -162,30 +164,8 @@ const Tasks = () => {
 
   const ListHeaderComponent = () => (
     <View>
-      {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.welcomeContainer}>
-          <Image
-            source={{ uri: userInfo?.avatar ?? "" }}
-            style={styles.avatar}
-            contentFit="cover"
-          />
-          <View>
-            <Text style={styles.title}>Hello, {userInfo?.name}</Text>
-            <Text style={styles.dateText}>
-              {moment().format("dddd, MMM DD")}
-            </Text>
-          </View>
-        </View>
-        <Link href="/(modal)/addTask" asChild>
-          <Pressable style={styles.addIcon}>
-            <Ionicons name="add" size={26} color={COLORS.colors.background} />
-          </Pressable>
-        </Link>
-      </View>
-
-      {/* My Tasks Title */}
-      <Text style={styles.myTasksTitle}>My Tasks</Text>
+      <Header link="/(modal)/addTask" />
+      <Title title="My Tasks"/>
 
       {/* Overview Container */}
       <View style={styles.overviewContainer}>

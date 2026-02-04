@@ -19,7 +19,7 @@ import styles from "@/utils/addExpense.style";
 import { COLORS } from "@/constants/color";
 import { useAuthStore } from "@/store/authStore";
 import { useLoadingStore } from "@/store/loadingStore";
-import budgetServices from "@/utils/budgetServices";
+import budgetServices from "@/services/budgetServices";
 import { DailyExpenses } from "@/utils/budgetUtils";
 import Toast from "react-native-toast-message";
 import { formatCurrencyVND } from "../../utils/budgetUtils";

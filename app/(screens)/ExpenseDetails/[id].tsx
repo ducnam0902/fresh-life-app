@@ -10,7 +10,7 @@ import {
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { COLORS } from "@/constants/color";
 import { DailyExpenses, getTagColorExpense } from "@/utils/budgetUtils";
-import budgetServices from "@/utils/budgetServices";
+import budgetServices from "@/services/budgetServices";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "@/utils/expenseDetails.style";
 import Toast from "react-native-toast-message";

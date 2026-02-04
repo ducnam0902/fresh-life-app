@@ -95,14 +95,6 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
 
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: COLORS.colors.text.primary,
-    marginBottom: 12,
-    fontFamily: COLORS.typography.fontFamily,
-  },
-
   // Task Progress Card
   taskProgressCard: {
     borderRadius: 18,

@@ -5,66 +5,13 @@ const styles = StyleSheet.create({
   flatListContainer: {
     flexGrow: 1,
     paddingHorizontal: 16,
-    paddingTop: 12,
+    paddingTop: 16,
     paddingBottom: 20,
   },
 
   container: {
     flex: 1,
     backgroundColor: COLORS.colors.background,
-  },
-
-  // Header
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 20,
-    marginTop: 8,
-  },
-
-  welcomeContainer: {
-    flexDirection: "row",
-    gap: 12,
-    alignItems: "center",
-    flex: 1,
-  },
-
-  avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-  },
-
-  title: {
-    fontSize: 18,
-    color: COLORS.colors.text.primary,
-    fontWeight: "600",
-    letterSpacing: 0.5,
-  },
-
-  dateText: {
-    fontSize: 14,
-    color: COLORS.colors.text.secondary,
-    fontWeight: "400",
-    marginTop: 2,
-  },
-
-  addIcon: {
-    borderRadius: 24,
-    backgroundColor: COLORS.colors.primary,
-    height: 40,
-    width: 40,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  // My Tasks Title
-  myTasksTitle: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: COLORS.colors.text.primary,
-    marginBottom: 12,
   },
 
   // Overview Container

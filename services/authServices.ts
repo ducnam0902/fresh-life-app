@@ -1,5 +1,5 @@
 import { SignInSuccessResponse } from "@react-native-google-signin/google-signin";
-import { supabase } from "./supabase";
+import { supabase } from "../utils/supabase";
 
 const authServices = {
   // Authentication service functions would be defined here
