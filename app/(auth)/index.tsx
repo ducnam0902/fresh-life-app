@@ -2,7 +2,7 @@ import { useLoadingStore } from "@/store/loadingStore";
 
 import { COLORS } from "@/constants/color";
 import { useAuthStore } from "@/store/authStore";
-import authServices from "@/utils/authServices";
+import authServices from "@/services/authServices";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   GoogleSignin,

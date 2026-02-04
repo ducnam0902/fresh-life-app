@@ -1,5 +1,5 @@
-import { BudgetPeriod, DailyExpenses, IExpenseGroup } from "./budgetUtils";
-import { supabase } from "./supabase";
+import { BudgetPeriod, DailyExpenses, IExpenseGroup } from "../utils/budgetUtils";
+import { supabase } from "../utils/supabase";
 
 const budgetServices = {
   setBudget: async (payload: BudgetPeriod) => {

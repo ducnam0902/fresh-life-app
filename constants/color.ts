@@ -25,12 +25,12 @@ export const COLORS = {
   typography: {
     fontFamily: "'SF Pro Display', 'Inter', -apple-system, sans-serif",
     fontSize: {
-      h1: "28px",             // "Screenify" branding / "Screnax" title
-      h2: "22px",             // "Messages", "Settings", "Add Person"
-      bodyLarge: "17px",      // Names in chat list (Juanita, Esther)
-      bodyMedium: "15px",     // Regular UI text and button labels
-      caption: "13px",        // Timestamps and "Why Go PRO?" bullets
-      tiny: "11px"            // "Popular" / "Advantageous" tags
+      h1: 27,       // "Screenify" branding / "Screnax" title
+      h2: 18,          // "Messages", "Settings", "Add Person"
+      bodyLarge: 17,      // Names in chat list (Juanita, Esther)
+      bodyMedium: 15,     // Regular UI text and button labels
+      caption: 13,        // Timestamps and "Why Go PRO?" bullets
+      tiny: 11        // "Popular" / "Advantageous" tags
     },
     fontWeight: {
       bold: "700",
@@ -46,8 +46,8 @@ export const COLORS = {
       avatar: "50%"           // Circular profile pictures
     },
     spacing: {
-      padding: "16px",        // Standard screen padding
-      gap: "12px"             // Gap between chat items
+      padding: 16,        // Standard screen padding
+      gap: 12      // Gap between chat items
     }
   },
 

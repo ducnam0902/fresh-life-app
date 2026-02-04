@@ -1,5 +1,5 @@
 import moment from "moment";
-import { supabase } from "./supabase";
+import { supabase } from "../utils/supabase";
 
 const tasksServices = {
   fetchTasks: async (id: string) => {

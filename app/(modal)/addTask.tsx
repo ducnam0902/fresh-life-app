@@ -1,7 +1,7 @@
 import { COLORS } from "@/constants/color";
 import { useLoadingStore } from "@/store/loadingStore";
 import styles from "@/utils/addTask.style";
-import tasksServices from "@/utils/taskServices";
+import tasksServices from "@/services/taskServices";
 import { priorityOptions, tagOptions } from "@/utils/tasksUtils";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { zodResolver } from "@hookform/resolvers/zod";

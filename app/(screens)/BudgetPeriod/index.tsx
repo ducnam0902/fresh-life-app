@@ -2,7 +2,7 @@ import { COLORS } from "@/constants/color";
 import { useAuthStore } from "@/store/authStore";
 import { useLoadingStore } from "@/store/loadingStore";
 import styles from "@/utils/budgetPeriod.style";
-import budgetServices from "@/utils/budgetServices";
+import budgetServices from "@/services/budgetServices";
 import { BudgetPeriod } from "@/utils/budgetUtils";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { zodResolver } from "@hookform/resolvers/zod";

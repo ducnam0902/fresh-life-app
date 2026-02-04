@@ -1,11 +1,11 @@
 import { COLORS } from "@/constants/color";
 import { useAuthStore } from "@/store/authStore";
 import { useLoadingStore } from "@/store/loadingStore";
-import budgetServices from "@/utils/budgetServices";
+import budgetServices from "@/services/budgetServices";
 import { IExpenseGroup } from "@/utils/budgetUtils";
 import styles from "@/utils/home.style";
 import { supabase } from "@/utils/supabase";
-import tasksServices from "@/utils/taskServices";
+import tasksServices from "@/services/taskServices";
 import { Task } from "@/utils/tasksUtils";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -18,6 +18,7 @@ import { Dimensions, Pressable, Text, View } from "react-native";
 import { LineChart, ProgressChart } from "react-native-chart-kit";
 import { ScrollView } from "react-native-gesture-handler";
 import { formatCurrencyVND } from "../../utils/budgetUtils";
+import Title from "@/components/Title";
 
 const chartTasksConfig = {
   backgroundGradientFrom: COLORS.colors.surface,
@@ -152,7 +153,7 @@ const Home = () => {
 
       {/* Task Progress Section */}
       <View style={styles.sectionContainer}>
-        <Text style={styles.sectionTitle}>Task Progress</Text>
+        <Title title="Task Progress" />
         <View style={styles.taskProgressCard}>
           <View style={styles.taskProgressContent}>
             <View style={styles.circleProgressContainer}>
@@ -216,7 +217,7 @@ const Home = () => {
 
       {/* Budget Tracker Section */}
       <View style={styles.sectionContainer}>
-        <Text style={styles.sectionTitle}>Budget Tracker</Text>
+        <Title title="Budget Tracker" />
         <LinearGradient
           colors={[COLORS.colors.surfaceLight, COLORS.colors.surface]}
           start={{ x: 0, y: 0 }}

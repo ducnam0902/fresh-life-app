@@ -2,7 +2,7 @@ import { COLORS } from "@/constants/color";
 import { useAuthStore } from "@/store/authStore";
 import { useLoadingStore } from "@/store/loadingStore";
 import styles from "@/utils/taskDetails.style";
-import tasksServices from "@/utils/taskServices";
+import tasksServices from "@/services/taskServices";
 import { getPriorityColor, getTagColor, Task } from "@/utils/tasksUtils";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";

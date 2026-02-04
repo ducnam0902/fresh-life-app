@@ -9,7 +9,7 @@ const TabsLayout = () => {
         tabBarActiveTintColor: COLORS.colors.primary,
         tabBarInactiveTintColor: COLORS.colors.text.secondary,
         tabBarStyle: {
-          backgroundColor: COLORS.colors.surface,
+          backgroundColor: COLORS.colors.background,
           borderTopColor: COLORS.colors.border,
           borderTopWidth: 1,
           paddingBottom: 8,
@@ -21,7 +21,7 @@ const TabsLayout = () => {
           fontWeight: "600",
         },
         sceneStyle: {
-          backgroundColor: COLORS.colors.surface,
+          backgroundColor: COLORS.colors.background,
         },
       }}
     >
