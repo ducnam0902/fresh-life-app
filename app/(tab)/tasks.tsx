@@ -1,17 +1,16 @@
 import Header from "@/components/Header";
 import Title from "@/components/Title";
 import { COLORS } from "@/constants/color";
+import tasksServices from "@/services/taskServices";
 import { useAuthStore } from "@/store/authStore";
 import { useLoadingStore } from "@/store/loadingStore";
-import styles from "@/utils/task.style";
-import tasksServices from "@/services/taskServices";
+import styles from "@/styles/task.style";
 import { getPriorityColor, getTagColor, Task } from "@/utils/tasksUtils";
 import { Entypo, Ionicons } from "@expo/vector-icons";
-import { Image } from "expo-image";
 import { Link } from "expo-router";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { FlatList, Pressable, Text, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
 import { ProgressChart } from "react-native-chart-kit";
 
 const chartConfig = {
@@ -83,15 +82,13 @@ const Tasks = () => {
           style={{
             ...styles.taskItem,
             opacity: item.is_complete ? 0.6 : 1,
+            borderLeftWidth: !duration && !item.is_complete ? 4 : 1,
+            borderLeftColor:
+              !duration && !item.is_complete
+                ? COLORS.colors.error
+                : COLORS.colors.border,
           }}
         >
-          {!duration && !item.is_complete && (
-            <>
-              <View style={styles.activeCurves} />
-              <View style={styles.hideCurves} />
-            </>
-          )}
-
           {item.is_complete ? (
             <View style={styles.checkboxChecked}>
               <Ionicons name="checkmark" size={16} color="white" />
@@ -165,7 +162,7 @@ const Tasks = () => {
   const ListHeaderComponent = () => (
     <View>
       <Header link="/(modal)/addTask" />
-      <Title title="My Tasks"/>
+      <Title title="My Tasks" />
 
       {/* Overview Container */}
       <View style={styles.overviewContainer}>

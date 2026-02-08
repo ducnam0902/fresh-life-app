@@ -102,33 +102,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
 
     backgroundColor: COLORS.colors.surface,
-    borderRadius: 48,
+    borderRadius: 32,
     borderWidth: 1,
     borderColor: COLORS.colors.border,
-
-  },
-
-  activeCurves: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    height: 82,
-    width: 82,
-    borderRadius: 9999,
-    backgroundColor: COLORS.colors.warning,
-
-  },
-
-  hideCurves: {
-    position: "absolute",
-    top: 0,
-    left: 3,
-    height: 82,
-    width: 82,
-    borderRadius: 9999,
-    backgroundColor: COLORS.colors.surface,
-    overflow: "hidden",
-
   },
 
   checkboxContainer: {

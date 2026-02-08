@@ -24,8 +24,6 @@ const styles = StyleSheet.create({
 
   // Budget Summary Card
   budgetSummaryCard: {
-    marginTop: 16,
-    marginBottom: 20,
     paddingHorizontal: 16,
     paddingVertical: 16,
     backgroundColor: COLORS.colors.surface,

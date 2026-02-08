@@ -49,6 +49,13 @@ export default function RootLayout() {
               }}
             />
             <Stack.Screen
+              name="(modal)/addSchedule"
+              options={{
+                headerShown: false,
+                presentation: "modal",
+              }}
+            />
+            <Stack.Screen
               name="(screens)/TaskDetails/[id]"
               options={{
                 headerShown: false,
@@ -62,6 +69,12 @@ export default function RootLayout() {
             />
             <Stack.Screen
               name="(screens)/ExpenseDetails/[id]"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="(screens)/ScheduleDetails/[id]"
               options={{
                 headerShown: false,
               }}

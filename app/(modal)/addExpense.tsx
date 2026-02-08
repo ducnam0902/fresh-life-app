@@ -15,7 +15,7 @@ import * as z from "zod";
 import moment from "moment";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import styles from "@/utils/addExpense.style";
+import styles from "@/styles/addExpense.style";
 import { COLORS } from "@/constants/color";
 import { useAuthStore } from "@/store/authStore";
 import { useLoadingStore } from "@/store/loadingStore";
@@ -23,6 +23,8 @@ import budgetServices from "@/services/budgetServices";
 import { DailyExpenses } from "@/utils/budgetUtils";
 import Toast from "react-native-toast-message";
 import { formatCurrencyVND } from "../../utils/budgetUtils";
+import BaseLayoutModal from "@/components/BaseLayoutModal";
+import ModalHeader from "@/components/ModalHeader";
 
 const expenseCategories = ["Eating", "Drink", "Transport", "Shopping", "Other"];
 
@@ -125,133 +127,126 @@ const AddExpenseModal = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
-      >
-        {/* Header */}
-        <View style={styles.headerContainer}>
-          <Pressable onPress={handleCancel} style={styles.backButton}>
-            <Ionicons
-              name="chevron-back"
-              size={28}
-              color={COLORS.colors.text.primary}
-            />
-          </Pressable>
-          <Text style={styles.headerTitle}>Add Expense</Text>
-          <View style={{ width: 28 }} />
-        </View>
+      <BaseLayoutModal>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+        >
+          {/* Header */}
+          <ModalHeader onCancel={handleCancel} title="Add Expense" />
 
-        {/* Expense Name */}
-        <View style={styles.formSection}>
-          <Text style={styles.fieldLabel}>Expense Name</Text>
-          <Controller
-            control={control}
-            name="name"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <>
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="e.g. Morning Coffee"
-                  placeholderTextColor={COLORS.colors.text.muted}
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                />
-                {errors.name && (
-                  <Text style={styles.errorText}>{errors.name.message}</Text>
-                )}
-              </>
-            )}
-          />
-        </View>
-
-        {/* Reason */}
-        <View style={styles.formSection}>
-          <Text style={styles.fieldLabel}>Reason</Text>
-          <Controller
-            control={control}
-            name="reason"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <>
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="e.g. Breakfast"
-                  placeholderTextColor={COLORS.colors.text.muted}
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                />
-                {errors.reason && (
-                  <Text style={styles.errorText}>{errors.reason.message}</Text>
-                )}
-              </>
-            )}
-          />
-        </View>
-
-        {/* Amount */}
-        <View style={styles.formSection}>
-          <Text style={styles.fieldLabel}>Amount</Text>
-          <Controller
-            control={control}
-            name="amount"
-            render={({ field: { value } }) => (
-              <>
-                <View style={styles.amountContainer}>
+          {/* Expense Name */}
+          <View style={styles.formSection}>
+            <Text style={styles.fieldLabel}>Expense Name</Text>
+            <Controller
+              control={control}
+              name="name"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <>
                   <TextInput
-                    style={styles.amountInput}
-                    placeholder="0"
+                    style={styles.textInput}
+                    placeholder="e.g. Morning Coffee"
                     placeholderTextColor={COLORS.colors.text.muted}
                     value={value}
-                    onChangeText={handleAmountChange}
-                    keyboardType="numeric"
+                    onChangeText={onChange}
+                    onBlur={onBlur}
                   />
-                  <Text style={styles.currencyLabel}>VND</Text>
-                </View>
-                {errors.amount && (
-                  <Text style={styles.errorText}>{errors.amount.message}</Text>
-                )}
-              </>
-            )}
-          />
-        </View>
+                  {errors.name && (
+                    <Text style={styles.errorText}>{errors.name.message}</Text>
+                  )}
+                </>
+              )}
+            />
+          </View>
 
-        {/* Category Selection */}
-        <View style={styles.formSection}>
-          <Text style={styles.categoryLabel}>CATEGORY</Text>
-          <Controller
-            control={control}
-            name="tag"
-            render={({ field: { onChange, value } }) => (
-              <View style={styles.categoryButtonsContainer}>
-                {expenseCategories.map((category) => (
-                  <Pressable
-                    key={category}
-                    style={[
-                      styles.categoryButton,
-                      value === category && styles.categoryButtonSelected,
-                    ]}
-                    onPress={() => onChange(category)}
-                  >
-                    <Text
-                      style={[
-                        styles.categoryButtonText,
-                        value === category && styles.categoryButtonTextSelected,
-                      ]}
-                    >
-                      {category}
+          {/* Reason */}
+          <View style={styles.formSection}>
+            <Text style={styles.fieldLabel}>Reason</Text>
+            <Controller
+              control={control}
+              name="reason"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <>
+                  <TextInput
+                    style={styles.textInput}
+                    placeholder="e.g. Breakfast"
+                    placeholderTextColor={COLORS.colors.text.muted}
+                    value={value}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                  />
+                  {errors.reason && (
+                    <Text style={styles.errorText}>
+                      {errors.reason.message}
                     </Text>
-                  </Pressable>
-                ))}
-              </View>
-            )}
-          />
-        </View>
+                  )}
+                </>
+              )}
+            />
+          </View>
 
-        {/* Spacer */}
-        <View style={styles.spacer} />
+          {/* Amount */}
+          <View style={styles.formSection}>
+            <Text style={styles.fieldLabel}>Amount</Text>
+            <Controller
+              control={control}
+              name="amount"
+              render={({ field: { value } }) => (
+                <>
+                  <View style={styles.amountContainer}>
+                    <TextInput
+                      style={styles.amountInput}
+                      placeholder="0"
+                      placeholderTextColor={COLORS.colors.text.muted}
+                      value={value}
+                      onChangeText={handleAmountChange}
+                      keyboardType="numeric"
+                    />
+                    <Text style={styles.currencyLabel}>VND</Text>
+                  </View>
+                  {errors.amount && (
+                    <Text style={styles.errorText}>
+                      {errors.amount.message}
+                    </Text>
+                  )}
+                </>
+              )}
+            />
+          </View>
 
+          {/* Category Selection */}
+          <View style={styles.formSection}>
+            <Text style={styles.categoryLabel}>CATEGORY</Text>
+            <Controller
+              control={control}
+              name="tag"
+              render={({ field: { onChange, value } }) => (
+                <View style={styles.categoryButtonsContainer}>
+                  {expenseCategories.map((category) => (
+                    <Pressable
+                      key={category}
+                      style={[
+                        styles.categoryButton,
+                        value === category && styles.categoryButtonSelected,
+                      ]}
+                      onPress={() => onChange(category)}
+                    >
+                      <Text
+                        style={[
+                          styles.categoryButtonText,
+                          value === category &&
+                            styles.categoryButtonTextSelected,
+                        ]}
+                      >
+                        {category}
+                      </Text>
+                    </Pressable>
+                  ))}
+                </View>
+              )}
+            />
+          </View>
+        </ScrollView>
         {/* Add Expense Button */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -273,7 +268,7 @@ const AddExpenseModal = () => {
             )}
           </TouchableOpacity>
         </View>
-      </ScrollView>
+      </BaseLayoutModal>
     </View>
   );
 };

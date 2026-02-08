@@ -1,7 +1,7 @@
 import { COLORS } from "@/constants/color";
 import { useAuthStore } from "@/store/authStore";
 import { useLoadingStore } from "@/store/loadingStore";
-import styles from "@/utils/budgetPeriod.style";
+import styles from "@/styles/budgetPeriod.style";
 import budgetServices from "@/services/budgetServices";
 import { BudgetPeriod } from "@/utils/budgetUtils";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";

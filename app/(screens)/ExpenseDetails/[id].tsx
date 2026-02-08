@@ -12,10 +12,11 @@ import { COLORS } from "@/constants/color";
 import { DailyExpenses, getTagColorExpense } from "@/utils/budgetUtils";
 import budgetServices from "@/services/budgetServices";
 import { Ionicons } from "@expo/vector-icons";
-import styles from "@/utils/expenseDetails.style";
+import styles from "@/styles/expenseDetails.style";
 import Toast from "react-native-toast-message";
 import { useLoadingStore } from "@/store/loadingStore";
 import moment from "moment";
+import ModalHeader from "@/components/ModalHeader";
 
 export default function ExpenseDetailsScreen() {
   const { id } = useLocalSearchParams();
@@ -62,18 +63,7 @@ export default function ExpenseDetailsScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons
-            name="chevron-back"
-            size={28}
-            color={COLORS.colors.text.primary}
-          />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Expense Details</Text>
-        <View style={{ width: 28 }} />
-      </View>
+      <ModalHeader title="Expense Details" onCancel={() => router.back()} />
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* Amount Card */}

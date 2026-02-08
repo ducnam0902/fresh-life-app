@@ -1,6 +1,6 @@
 import { COLORS } from "@/constants/color";
 import { useLoadingStore } from "@/store/loadingStore";
-import styles from "@/utils/addTask.style";
+import styles from "@/styles/addTask.style";
 import tasksServices from "@/services/taskServices";
 import { priorityOptions, tagOptions } from "@/utils/tasksUtils";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -11,16 +11,18 @@ import moment from "moment";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
-    Pressable,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import Toast from "react-native-toast-message";
 import * as z from "zod";
 import { useAuthStore } from "../../store/authStore";
+import BaseLayoutModal from "@/components/BaseLayoutModal";
+import ModalHeader from "@/components/ModalHeader";
 
 // Zod validation schema
 const taskSchema = z.object({
@@ -34,7 +36,7 @@ const taskSchema = z.object({
     .string()
     .refine(
       (val) => !val || /^\d{2}\-\d{2}\-\d{4}$/.test(val),
-      "Due date must be in DD-MM-YYYY format"
+      "Due date must be in DD-MM-YYYY format",
     )
     .refine((val) => {
       if (!val) return true;
@@ -64,7 +66,7 @@ const formatDateInput = (text: string): string => {
   } else {
     return `${cleaned.slice(0, 2)}/${cleaned.slice(2, 4)}/${cleaned.slice(
       4,
-      8
+      8,
     )}`;
   }
 };
@@ -164,216 +166,213 @@ const AddTaskModal = () => {
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* Header */}
-      <View style={styles.headerTitle}>
-        <Pressable onPress={handleCancel} style={styles.backButton}>
-          <Ionicons
-            name="chevron-back"
-            size={28}
-            color={COLORS.colors.text.primary}
-          />
-        </Pressable>
-        <Text style={styles.newTaskTitle}>New Task</Text>
-        <View style={{ width: 28 }} />
-      </View>
+      <BaseLayoutModal>
+        <View>
+          {/* Header */}
+          <ModalHeader onCancel={handleCancel} title="New Task" />
 
-      {/* Task Name Input */}
-      <View style={styles.formSection}>
-        <Text style={styles.sectionLabel}>TASK NAME</Text>
-        <Controller
-          control={control}
-          name="taskName"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <>
-              <TextInput
-                style={styles.taskNameInput}
-                placeholder="What do you want to accomplish?"
-                placeholderTextColor={COLORS.colors.text.secondary}
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-              />
-              {errors.taskName && (
-                <Text style={styles.errorText}>{errors.taskName.message}</Text>
+          {/* Task Name Input */}
+          <View style={styles.formSection}>
+            <Text style={styles.sectionLabel}>TASK NAME</Text>
+            <Controller
+              control={control}
+              name="taskName"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <>
+                  <TextInput
+                    style={styles.taskNameInput}
+                    placeholder="What do you want to accomplish?"
+                    placeholderTextColor={COLORS.colors.text.secondary}
+                    value={value}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                  />
+                  {errors.taskName && (
+                    <Text style={styles.errorText}>
+                      {errors.taskName.message}
+                    </Text>
+                  )}
+                </>
               )}
-            </>
-          )}
-        />
-      </View>
+            />
+          </View>
 
-      {/* Category/Tag Selection */}
-      <View style={styles.formSection}>
-        <Text style={styles.sectionLabel}>CATEGORY</Text>
-        <Controller
-          control={control}
-          name="tag"
-          render={({ field: { onChange, value } }) => (
-            <View style={styles.tagButtonsContainer}>
-              {tagOptions.map((option) => (
-                <Pressable
-                  key={option}
-                  style={[
-                    styles.tagButton,
-                    value === option && styles.tagButtonSelected,
-                  ]}
-                  onPress={() => onChange(option)}
-                >
-                  <Text
-                    style={[
-                      styles.tagButtonText,
-                      value === option && styles.tagButtonTextSelected,
-                    ]}
-                  >
-                    {option}
-                  </Text>
-                </Pressable>
-              ))}
-            </View>
-          )}
-        />
-      </View>
-
-      {/* Priority Selection */}
-      <View style={styles.formSection}>
-        <Text style={styles.sectionLabel}>PRIORITY</Text>
-        <Controller
-          control={control}
-          name="priority"
-          render={({ field: { onChange, value } }) => (
-            <View style={styles.priorityButtonsContainer}>
-              {priorityOptions.map((option) => (
-                <Pressable
-                  key={option}
-                  style={[
-                    styles.priorityButton,
-                    value === option && styles.priorityButtonSelected,
-                  ]}
-                  onPress={() => onChange(option)}
-                >
-                  <Text
-                    style={[
-                      styles.priorityButtonText,
-                      value === option && styles.priorityButtonTextSelected,
-                    ]}
-                  >
-                    {option}
-                  </Text>
-                </Pressable>
-              ))}
-            </View>
-          )}
-        />
-      </View>
-
-      {/* Due Date & Time Section */}
-      <View style={styles.formSection}>
-        <Text style={styles.sectionLabel}>DUE DATE & TIME</Text>
-
-        {/* Due Date */}
-        <Controller
-          control={control}
-          name="dueDate"
-          render={({ field: { value } }) => (
-            <>
-              <Pressable
-                style={styles.dueDateContainer}
-                onPress={() => setShowDatePicker(true)}
-              >
-                <MaterialCommunityIcons
-                  name="calendar"
-                  size={20}
-                  color={COLORS.colors.primary}
-                  style={styles.dateIcon}
-                />
-                <Text style={styles.dueDateText}>
-                  {value
-                    ? `${moment(value, "DD-MM-YYYY").format("ddd, MMM DD")}`
-                    : "Select date"}
-                </Text>
-                <Ionicons
-                  name="chevron-forward"
-                  size={20}
-                  color={COLORS.colors.text.secondary}
-                  style={styles.chevronIcon}
-                />
-              </Pressable>
-              {errors.dueDate && (
-                <Text style={styles.errorText}>{errors.dueDate.message}</Text>
+          {/* Category/Tag Selection */}
+          <View style={styles.formSection}>
+            <Text style={styles.sectionLabel}>CATEGORY</Text>
+            <Controller
+              control={control}
+              name="tag"
+              render={({ field: { onChange, value } }) => (
+                <View style={styles.tagButtonsContainer}>
+                  {tagOptions.map((option) => (
+                    <Pressable
+                      key={option}
+                      style={[
+                        styles.tagButton,
+                        value === option && styles.tagButtonSelected,
+                      ]}
+                      onPress={() => onChange(option)}
+                    >
+                      <Text
+                        style={[
+                          styles.tagButtonText,
+                          value === option && styles.tagButtonTextSelected,
+                        ]}
+                      >
+                        {option}
+                      </Text>
+                    </Pressable>
+                  ))}
+                </View>
               )}
-            </>
-          )}
-        />
+            />
+          </View>
 
-        {showDatePicker && (
-          <DateTimePicker
-            value={
-              getValues("dueDate")
-                ? new Date(getValues("dueDate").split("-").reverse().join("-"))
-                : new Date()
-            }
-            mode="date"
-            display="default"
-            onChange={handleDateChange}
-            minimumDate={new Date()}
-          />
-        )}
+          {/* Priority Selection */}
+          <View style={styles.formSection}>
+            <Text style={styles.sectionLabel}>PRIORITY</Text>
+            <Controller
+              control={control}
+              name="priority"
+              render={({ field: { onChange, value } }) => (
+                <View style={styles.priorityButtonsContainer}>
+                  {priorityOptions.map((option) => (
+                    <Pressable
+                      key={option}
+                      style={[
+                        styles.priorityButton,
+                        value === option && styles.priorityButtonSelected,
+                      ]}
+                      onPress={() => onChange(option)}
+                    >
+                      <Text
+                        style={[
+                          styles.priorityButtonText,
+                          value === option && styles.priorityButtonTextSelected,
+                        ]}
+                      >
+                        {option}
+                      </Text>
+                    </Pressable>
+                  ))}
+                </View>
+              )}
+            />
+          </View>
 
-        {/* Estimated Time */}
-        <Controller
-          control={control}
-          name="estimatedTime"
-          render={({ field: { value } }) => (
-            <Pressable
-              style={styles.estimatedTimeContainer}
-              onPress={() => setShowTimePicker(true)}
-            >
-              <MaterialCommunityIcons
-                name="clock"
-                size={20}
-                color={COLORS.colors.primary}
-                style={styles.timeIcon}
+          {/* Due Date & Time Section */}
+          <View style={styles.formSection}>
+            <Text style={styles.sectionLabel}>DUE DATE & TIME</Text>
+
+            {/* Due Date */}
+            <Controller
+              control={control}
+              name="dueDate"
+              render={({ field: { value } }) => (
+                <>
+                  <Pressable
+                    style={styles.dueDateContainer}
+                    onPress={() => setShowDatePicker(true)}
+                  >
+                    <MaterialCommunityIcons
+                      name="calendar"
+                      size={20}
+                      color={COLORS.colors.primary}
+                      style={styles.dateIcon}
+                    />
+                    <Text style={styles.dueDateText}>
+                      {value
+                        ? `${moment(value, "DD-MM-YYYY").format("ddd, MMM DD")}`
+                        : "Select date"}
+                    </Text>
+                    <Ionicons
+                      name="chevron-forward"
+                      size={20}
+                      color={COLORS.colors.text.secondary}
+                      style={styles.chevronIcon}
+                    />
+                  </Pressable>
+                  {errors.dueDate && (
+                    <Text style={styles.errorText}>
+                      {errors.dueDate.message}
+                    </Text>
+                  )}
+                </>
+              )}
+            />
+
+            {showDatePicker && (
+              <DateTimePicker
+                value={
+                  getValues("dueDate")
+                    ? new Date(
+                        getValues("dueDate").split("-").reverse().join("-"),
+                      )
+                    : new Date()
+                }
+                mode="date"
+                display="default"
+                onChange={handleDateChange}
+                minimumDate={new Date()}
               />
-              <Text style={styles.estimatedTimeText}>
-                {value ? `${value}` : "Select time"}
-              </Text>
-              <Ionicons
-                name="chevron-forward"
-                size={20}
-                color={COLORS.colors.text.secondary}
-                style={styles.chevronIcon}
+            )}
+
+            {/* Estimated Time */}
+            <Controller
+              control={control}
+              name="estimatedTime"
+              render={({ field: { value } }) => (
+                <Pressable
+                  style={styles.estimatedTimeContainer}
+                  onPress={() => setShowTimePicker(true)}
+                >
+                  <MaterialCommunityIcons
+                    name="clock"
+                    size={20}
+                    color={COLORS.colors.primary}
+                    style={styles.timeIcon}
+                  />
+                  <Text style={styles.estimatedTimeText}>
+                    {value ? `${value}` : "Select time"}
+                  </Text>
+                  <Ionicons
+                    name="chevron-forward"
+                    size={20}
+                    color={COLORS.colors.text.secondary}
+                    style={styles.chevronIcon}
+                  />
+                </Pressable>
+              )}
+            />
+
+            {showTimePicker && (
+              <DateTimePicker
+                value={
+                  getValues("estimatedTime")
+                    ? new Date(`2000-01-01T${getValues("estimatedTime")}`)
+                    : new Date()
+                }
+                mode="time"
+                display="default"
+                onChange={handleTimeChange}
+                is24Hour={true}
               />
-            </Pressable>
-          )}
-        />
+            )}
+          </View>
+        </View>
 
-        {showTimePicker && (
-          <DateTimePicker
-            value={
-              getValues("estimatedTime")
-                ? new Date(`2000-01-01T${getValues("estimatedTime")}`)
-                : new Date()
-            }
-            mode="time"
-            display="default"
-            onChange={handleTimeChange}
-            is24Hour={true}
-          />
-        )}
-      </View>
-
-      {/* Spacer */}
-      <View style={styles.spacer} />
-
-      {/* Action Buttons */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={styles.createTaskButton}
-          onPress={handleSubmit(onSubmit)}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.createTaskButtonText}>Create Task</Text>
-        </TouchableOpacity>
-      </View>
+        {/* Action Buttons */}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.createTaskButton}
+            onPress={handleSubmit(onSubmit)}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.createTaskButtonText}>Create Task</Text>
+          </TouchableOpacity>
+        </View>
+      </BaseLayoutModal>
     </ScrollView>
   );
 };
