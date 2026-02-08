@@ -15,7 +15,7 @@ export default ({ config }) => ({
   },
   "android": {
     "adaptiveIcon": {
-      "foregroundImage": "./assets/playstore-icon.png",
+      "foregroundImage": "./assets/fresh-logo.png",
       "backgroundColor": "#ffffff"
     },
     "edgeToEdgeEnabled": true,
@@ -37,8 +37,8 @@ export default ({ config }) => ({
       "expo-splash-screen",
       {
         "backgroundColor": "#1C1C1E",
-        "image": "./assets/playstore-icon.png",
-        "resizeMode": "cover"
+        "image": "./assets/fresh-logo.png",
+        "imageWidth": 200
       }
     ]
   ],
