@@ -8,6 +8,7 @@ export default ({ config }) => ({
   "icon": "./assets/fresh-logo.png",
   "userInterfaceStyle": "light",
   "newArchEnabled": true,
+  "scheme": process.env.EXPO_PUBLIC_PACKAGE,
   "ios": {
     "supportsTablet": true,
     "bundleIdentifier": process.env.EXPO_PUBLIC_PACKAGE

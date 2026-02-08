@@ -1,11 +1,12 @@
+import Title from "@/components/Title";
 import { COLORS } from "@/constants/color";
+import budgetServices from "@/services/budgetServices";
+import tasksServices from "@/services/taskServices";
 import { useAuthStore } from "@/store/authStore";
 import { useLoadingStore } from "@/store/loadingStore";
-import budgetServices from "@/services/budgetServices";
 import { IExpenseGroup } from "@/utils/budgetUtils";
-import styles from "@/utils/home.style";
+import styles from "@/styles/home.style";
 import { supabase } from "@/utils/supabase";
-import tasksServices from "@/services/taskServices";
 import { Task } from "@/utils/tasksUtils";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -14,11 +15,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { Dimensions, Pressable, Text, View } from "react-native";
-import { LineChart, ProgressChart } from "react-native-chart-kit";
+import { Pressable, Text, View } from "react-native";
+import { ProgressChart } from "react-native-chart-kit";
 import { ScrollView } from "react-native-gesture-handler";
 import { formatCurrencyVND } from "../../utils/budgetUtils";
-import Title from "@/components/Title";
 
 const chartTasksConfig = {
   backgroundGradientFrom: COLORS.colors.surface,
@@ -225,7 +225,7 @@ const Home = () => {
           style={styles.budgetCard}
         >
           {/* Daily Expenses Header */}
-          <Text style={styles.budgetLabel}>Daily Usage</Text>
+          <Text style={styles.budgetLabel}>Daily Remaining</Text>
 
           {/* Amount Display */}
           <View style={styles.amountContainer}>
@@ -235,7 +235,7 @@ const Home = () => {
                 color: isOverBudgetColor,
               }}
             >
-              {formatCurrencyVND(expenseData.totalExpenseToday)}
+              {formatCurrencyVND(expenseData.budgetToday - expenseData.totalExpenseToday)}
             </Text>
             <Text
               style={{

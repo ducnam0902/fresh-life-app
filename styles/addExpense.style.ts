@@ -12,33 +12,10 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
 
-  // Header
-  headerContainer: {
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.colors.border,
-  },
-
-  backButton: {
-    padding: 4,
-  },
-
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: COLORS.colors.text.primary,
-    letterSpacing: 0.5,
-    fontFamily: COLORS.typography.fontFamily,
-  },
-
   // Form Section
   formSection: {
     paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingBottom: 16,
   },
 
   fieldLabel: {
@@ -134,15 +111,11 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 
-  // Spacer
-  spacer: {
-    minHeight: 40,
-  },
-
   // Button Container
   buttonContainer: {
     paddingHorizontal: 16,
     paddingVertical: 12,
+    marginBottom: 16,
   },
 
   addExpenseButton: {

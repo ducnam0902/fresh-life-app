@@ -1,24 +1,20 @@
+import BaseLayoutModal from "@/components/BaseLayoutModal";
+import ModalHeader from "@/components/ModalHeader";
 import { COLORS } from "@/constants/color";
+import tasksServices from "@/services/taskServices";
 import { useAuthStore } from "@/store/authStore";
 import { useLoadingStore } from "@/store/loadingStore";
-import styles from "@/utils/taskDetails.style";
-import tasksServices from "@/services/taskServices";
+import styles from "@/styles/taskDetails.style";
 import { getPriorityColor, getTagColor, Task } from "@/utils/tasksUtils";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { Dimensions, Pressable, ScrollView, Text, View } from "react-native";
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import Toast from "react-native-toast-message";
-import { is } from "zod/locales";
 
 const TaskDetailsScreen = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const insets = useSafeAreaInsets();
   const router = useRouter();
   const { isLoading, setLoading } = useLoadingStore();
   const { userInfo } = useAuthStore();
@@ -96,27 +92,9 @@ const TaskDetailsScreen = () => {
         </View>
       )}
       {task && (
-        <View
-          style={{
-            ...styles.contentContainer,
-            height:
-              Dimensions.get("window").height - insets.top - insets.bottom,
-          }}
-        >
+        <BaseLayoutModal>
           <View>
-            <View style={styles.header}>
-              <Pressable
-                onPress={() => router.back()}
-                style={styles.backButton}
-              >
-                <Ionicons
-                  name="chevron-back"
-                  size={28}
-                  color={COLORS.colors.text.primary}
-                />
-              </Pressable>
-              <Text style={styles.headerTitle}>Task Details</Text>
-            </View>
+            <ModalHeader title="Task Details" onCancel={() => router.back()} />
 
             {/* Current Status Card */}
             <View style={styles.statusCard}>
@@ -220,7 +198,7 @@ const TaskDetailsScreen = () => {
               </View>
             )}
           </View>
-        </View>
+        </BaseLayoutModal>
       )}
       {/* Header */}
     </ScrollView>

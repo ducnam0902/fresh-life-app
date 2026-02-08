@@ -5,7 +5,7 @@ import { FlatList, Pressable, Text, View } from "react-native";
 import moment from "moment";
 import { Link, useRouter } from "expo-router";
 import { useLoadingStore } from "@/store/loadingStore";
-import styles from "@/utils/budget.styles";
+import styles from "@/styles/budget.styles";
 import {
   BudgetPeriod,
   DailyExpenses,

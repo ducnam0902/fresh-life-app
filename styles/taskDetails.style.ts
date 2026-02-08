@@ -23,26 +23,6 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
 
-  // Header
-  header: {
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
-  },
-
-  backButton: {
-    padding: 4,
-  },
-
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: COLORS.colors.text.primary,
-    letterSpacing: 0.5,
-    fontFamily: COLORS.typography.fontFamily,
-  },
 
   // Status Card
   statusCard: {

@@ -7,30 +7,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  headerTitle: {
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderBottomColor: COLORS.colors.border,
-    borderBottomWidth: 1,
-  },
-
-  backButton: {
-    padding: 4,
-  },
-
-  newTaskTitle: {
-    color: COLORS.colors.text.primary,
-    fontSize: 18,
-    fontWeight: "700",
-    letterSpacing: 0.5,
-  },
-
   formSection: {
     paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingBottom: 16,
   },
 
   sectionLabel: {
@@ -179,17 +158,12 @@ const styles = StyleSheet.create({
     fontFamily: COLORS.typography.fontFamily,
   },
 
-  // Spacer
-  spacer: {
-    flex: 1,
-    minHeight: 40,
-  },
-
   // Button Styles
   buttonContainer: {
     paddingHorizontal: 16,
     paddingVertical: 20,
     gap: 12,
+    marginBottom: 8,
   },
 
   createTaskButton: {
